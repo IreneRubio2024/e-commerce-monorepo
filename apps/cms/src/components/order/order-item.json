@@ -4,6 +4,18 @@
     "displayName": "orderItem"
   },
   "options": {},
-  "attributes": {},
+  "attributes": {
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "decimal"
+    }
+  },
   "config": {}
 }

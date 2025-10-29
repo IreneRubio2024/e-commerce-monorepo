@@ -33,8 +33,9 @@
     "inStock": {
       "type": "boolean"
     },
-    "Test": {
-      "type": "string"
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }

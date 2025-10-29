@@ -5,7 +5,11 @@ export interface OrderOrderItem extends Struct.ComponentSchema {
   info: {
     displayName: 'orderItem';
   };
-  attributes: {};
+  attributes: {
+    price: Schema.Attribute.Decimal;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    quantity: Schema.Attribute.Integer;
+  };
 }
 
 declare module '@strapi/strapi' {
