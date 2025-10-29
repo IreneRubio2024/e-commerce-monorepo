@@ -32,6 +32,9 @@
     },
     "inStock": {
       "type": "boolean"
+    },
+    "Test": {
+      "type": "string"
     }
   }
 }
