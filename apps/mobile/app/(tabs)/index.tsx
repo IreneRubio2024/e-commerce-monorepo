@@ -38,7 +38,7 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.headerBox}>
-      <Text style={styles.headerText}>Products</Text>
+      <Text style={styles.headerText}>Productss</Text>
       </View>
 
       <View style={styles.searchContainer}>
