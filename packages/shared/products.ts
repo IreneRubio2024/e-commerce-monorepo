@@ -10,7 +10,18 @@ export type Product = {
   category: string;
 };
 
+<<<<<<< Updated upstream
 const API_URL = "http://localhost:1337/api/products?populate=*";
+=======
+
+const STRAPI_URL =
+  process.env.EXPO_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:1337";
+
+const API_URL = `${STRAPI_URL}/api/products?populate[media][populate]=*`;
+
+>>>>>>> Stashed changes
 export async function fetchProducts(): Promise<Product[]> {
   try {
     const res = await fetch(API_URL);
@@ -62,3 +73,6 @@ export async function fetchProducts(): Promise<Product[]> {
     return [];
   }
 }
+
+
+

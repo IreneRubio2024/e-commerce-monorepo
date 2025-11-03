@@ -1,4 +1,4 @@
-import { Image } from "expo-image";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useRef, useState } from "react";
+import { Image } from "expo-image";
 import {
   logo,
   filterBar,
@@ -21,6 +21,7 @@ import {
   search,
   placeholder,
 } from "@/assets/images";
+import { fetchProducts, type Product } from "@repo/shared/products";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -37,9 +38,9 @@ export default function HomeScreen() {
     "Sneakers",
     "Bags",
   ]);
-  const data = Array.from({ length: 10 });
 
-  const numColumns = 2;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // --- Animation setup ---
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -66,6 +67,21 @@ export default function HomeScreen() {
       outputRange: [0, screenWidth * 0.5], // moves to middle
     }),
   };
+
+  // --- Load products from Strapi ---
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const fetched = await fetchProducts();
+        setProducts(fetched);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProducts();
+  }, []);
 
   return (
     <SafeAreaProvider>
@@ -94,11 +110,13 @@ export default function HomeScreen() {
           <Image source={search} style={styles.searchIcon} />
           <TextInput style={styles.searchInput} placeholder="search" />
         </View>
+
         <Pressable onPress={() => setOpenFilter(!openFilter)}>
           <Text style={styles.filterToggle}>
             Filter {openFilter ? "<" : ">"}
           </Text>
         </Pressable>
+
         {/* Main wrapper */}
         <View style={styles.mainWrapper}>
           {/* --- Filter Panel (absolute + animated) --- */}
@@ -107,18 +125,11 @@ export default function HomeScreen() {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <View style={styles.categoryBox}>
-                <Text>S</Text>
-              </View>
-              <View style={styles.categoryBox}>
-                <Text>M</Text>
-              </View>
-              <View style={styles.categoryBox}>
-                <Text>L</Text>
-              </View>
-              <View style={styles.categoryBox}>
-                <Text>XL</Text>
-              </View>
+              {["S", "M", "L", "XL"].map((size) => (
+                <View key={size} style={styles.categoryBox}>
+                  <Text>{size}</Text>
+                </View>
+              ))}
             </View>
 
             <Pressable onPress={() => setOpenFilter(false)}>
@@ -138,48 +149,69 @@ export default function HomeScreen() {
                 ))}
               </View>
             </ScrollView>
-            <FlatList
-              data={data}
-              numColumns={2} // fixed
-              keyExtractor={(_, index) => index.toString()}
-              renderItem={({ index }) => (
-                <View
-                  style={[
-                    styles.productCard,
-                    {
-                      width: openFilter ? "100%" : "48%", // 1 col = 100%, 2 col = 48%
-                    },
-                  ]}
-                >
-                  <View style={{ width: "100%", aspectRatio: 3 / 4 }}>
-                    <Image
-                      source={placeholder}
-                      style={{ width: "100%", height: "100%", borderRadius: 8 }}
-                      resizeMode="cover"
-                    />
-                  </View>
 
-                  <Text style={{ fontSize: 16, opacity: 0.66 }}>Type</Text>
-                  <View style={styles.productTitleandPrice}>
-                    <Text style={{ fontSize: 18 }}>Title</Text>
-                    <Text style={{ fontSize: 18 }}>{"$ 100"}</Text>
+            {/* --- Product List --- */}
+            {loading ? (
+              <Text style={{ textAlign: "center", marginTop: 50 }}>
+                Loading products...
+              </Text>
+            ) : products.length === 0 ? (
+              <Text style={{ textAlign: "center", marginTop: 50 }}>
+                No products found
+              </Text>
+            ) : (
+              <FlatList
+                data={products}
+                numColumns={openFilter ? 1 : 2}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <View
+                    style={[
+                      styles.productCard,
+                      {
+                        width: openFilter ? "100%" : "48%",
+                      },
+                    ]}
+                  >
+                    <View style={{ width: "100%", aspectRatio: 3 / 4 }}>
+                      <Image
+                        source={{
+                          uri:
+                            item.media?.[0] ||
+                            "https://via.placeholder.com/300",
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: 8,
+                        }}
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <Text style={{ fontSize: 16, opacity: 0.66 }}>
+                      {item.slug || "product"}
+                    </Text>
+                    <View style={styles.productTitleandPrice}>
+                      <Text style={{ fontSize: 18 }}>{item.title}</Text>
+                      <Text style={{ fontSize: 18 }}>{`$ ${item.price}`}</Text>
+                    </View>
                   </View>
-                </View>
-              )}
-              columnWrapperStyle={
-                openFilter
-                  ? { flexDirection: "column" } // single column layout
-                  : {
+                )}
+                columnWrapperStyle={
+                  openFilter
+                    ? { flexDirection: "column" }
+                    : {
                       justifyContent: "space-between",
                       alignItems: "flex-start",
-                    } // 2 col
-              }
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingBottom: 270,
-                paddingHorizontal: 18,
-              }}
-            />
+                    }
+                }
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingBottom: 270,
+                  paddingHorizontal: 18,
+                }}
+              />
+            )}
           </Animated.View>
         </View>
       </SafeAreaView>
@@ -235,8 +267,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     bottom: 0,
-    width: "50%", // 50% of the screen
-
+    width: "50%",
     padding: 16,
     borderRightWidth: 1,
     borderRightColor: "#CCC",
