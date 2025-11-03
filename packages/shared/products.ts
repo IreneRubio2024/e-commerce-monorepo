@@ -10,7 +10,6 @@ export type Product = {
 };
 
 const API_URL = "http://localhost:1337/api/products?populate=*"; // update with your Strapi host
-
 export async function fetchProducts(): Promise<Product[]> {
   try {
     const res = await fetch(API_URL);
@@ -21,30 +20,28 @@ export async function fetchProducts(): Promise<Product[]> {
 
     const json = await res.json();
 
-    // Map Strapi response to simplified Product[]
     const products: Product[] = (json.data || []).map((item: any) => {
-      // Depending on your setup, you might need item.attributes or just item
-      const attrs = item.attributes ?? item;
-
-      const mediaUrls: string[] =
-        attrs.media
-          ?.map((m: any) =>
-            m?.url
-              ? m.url.startsWith("http")
-                ? m.url
-                : `http://localhost:1337${m.url}`
-              : ""
-          )
-          .filter(Boolean) || [];
+      // No hay "attributes", así que accedemos directamente
+      const mediaUrls: string[] = (item.media ?? [])
+        .map((m: any) => {
+          const url = m?.url;
+          return url
+            ? url.startsWith("http")
+              ? url
+              : `http://localhost:1337${url}`
+            : null;
+        })
+        .filter(Boolean) as string[];
 
       return {
         id: item.id,
-        title: attrs.title || "No title",
-        description: attrs.description || "",
-        price: attrs.price || 0,
-        inStock: attrs.inStock ?? false,
-        slug: attrs.slug || "",
+        title: item.title || "No title",
+        description: item.description || "",
+        price: item.price || 0,
+        inStock: item.inStock ?? false,
+        slug: item.slug || "",
         media: mediaUrls,
+        category: item.category || "Uncategorized", // ✅ ya es un string directo
       };
     });
 

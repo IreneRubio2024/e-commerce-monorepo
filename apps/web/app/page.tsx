@@ -23,8 +23,11 @@ export default function Home() {
           <h2>{p.title}</h2>
           {p.media[0] && <img src={p.media[0]} alt={p.title} width={200} />}
           <p>{p.description}</p>
-          <p>{p.price}</p>
+          <p>{p.price}kr</p>
           <p>{p.inStock ? "In stock" : "Out of stock"}</p>
+          <p className="text-sm text-gray-500">
+            Category: {p.category || "Uncategorized"}
+          </p>
         </div>
       ))}
     </div>
