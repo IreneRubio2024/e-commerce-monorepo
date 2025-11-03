@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { fetchProducts, type Product } from "@repo/shared/products";
+import Link from "next/link";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -20,7 +21,10 @@ export default function Home() {
 
       {products.map((p) => (
         <div key={p.id}>
-          <h2>{p.title}</h2>
+          <Link href={`/${p.slug}`}>
+            <h3>{p.title}</h3>
+          </Link>
+
           {p.media[0] && <img src={p.media[0]} alt={p.title} width={200} />}
           <p>{p.description}</p>
           <p>{p.price}kr</p>
