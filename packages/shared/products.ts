@@ -6,7 +6,6 @@ export type Product = {
   inStock: boolean;
   slug: string;
   media: string[];
-  category: string;
 };
 
 const API_URL = "http://localhost:1337/api/products?populate=*"; // update with your Strapi host
@@ -21,9 +20,7 @@ export async function fetchProducts(): Promise<Product[]> {
 
     const json = await res.json();
 
-    // Map Strapi response to simplified Product[]
     const products: Product[] = (json.data || []).map((item: any) => {
-      // Depending on your setup, you might need item.attributes or just item
       const attrs = item.attributes ?? item;
 
       const mediaUrls: string[] =
