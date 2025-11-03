@@ -19,7 +19,7 @@ const STRAPI_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "http://localhost:1337";
 
-const API_URL = `${STRAPI_URL}/api/products?populate[media][populate]=*`;
+const API_URL = `${STRAPI_URL}/api/products?populate=*;
 
 >>>>>>> Stashed changes
 export async function fetchProducts(): Promise<Product[]> {
