@@ -6,6 +6,7 @@ export type Product = {
   inStock: boolean;
   slug: string;
   media: string[];
+  category: string;
 };
 
 const API_URL = "http://localhost:1337/api/products?populate=*"; // update with your Strapi host
