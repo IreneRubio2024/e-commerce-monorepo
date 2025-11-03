@@ -192,7 +192,11 @@ export default function Home() {
             }`}
           >
             {products.map((p) => (
-              <div key={p.id} className="border p-4 rounded-md shadow-sm">
+              <Link
+                href={`/products/${p.slug}`}
+                key={p.id}
+                className="border p-4 rounded-md shadow-sm"
+              >
                 {p.media[0] && (
                   <img
                     src={p.media[0]}
@@ -208,7 +212,7 @@ export default function Home() {
                     {p.inStock ? "In stock" : "Out of stock"}
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
