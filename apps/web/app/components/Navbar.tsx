@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Navbar({ open, setOpen }: Props) {
-  const { itemCount } = useCart(); // 👈 get live cart count
+  const { itemCount } = useCart();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -203,7 +203,6 @@ export default function Navbar({ open, setOpen }: Props) {
         </div>
       </header>
 
-      {/* 🧺 CART DRAWER */}
       <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>
   );

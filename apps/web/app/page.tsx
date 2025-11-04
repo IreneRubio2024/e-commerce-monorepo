@@ -121,7 +121,9 @@ export default function Home() {
 
       {/* Filter Panel */}
       {(open || !isMobile) && (
-        <div className=" col-span-12 lg:col-span-4 col-start-1 bg-white shadow-md p-4 ">
+        <div
+          className={`${open ? "col-span-6" : "w-full"} col-span-12 lg:col-span-4 col-start-1 bg-white shadow-md p-4`}
+        >
           <h2 className="hidden lg:block text-xl font-semibold mb-2">Filter</h2>
           <h3 className="font-semibold mb-2">Size</h3>
           <div className="flex justify-start mb-4 gap-4">
@@ -193,8 +195,10 @@ export default function Home() {
         </div>
 
         <div
-          className={`grid gap-[40px] ${
-            open && isMobile ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-3"
+          className={`grid gap-[40px] col-span- ${
+            open && isMobile
+              ? "w-1/2 grid-cols-1"
+              : "w-full grid-cols-2 lg:grid-cols-3"
           }`}
         >
           {products.map((p) => (
