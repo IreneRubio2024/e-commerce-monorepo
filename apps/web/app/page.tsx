@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import { fetchProducts, type Product } from "@repo/shared/products";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
-<<<<<<< Updated upstream
 import Image from "next/image";
-=======
 import AddToCartButton from "./components/cart/AddToCartButton";
->>>>>>> Stashed changes
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -201,106 +198,40 @@ export default function Home() {
           }`}
         >
           {products.map((p) => (
-            <Link
-              href={`/products/${p.slug}`}
+            <div
               key={p.id}
-              className={` ${open && isMobile ? "col-span-1" : "col-span-1"} flex flex-col w-full `}
+              className="border p-4 rounded-md shadow-sm flex flex-col"
             >
               {p.media[0] && (
-                <Image
-                  src={p.media[0]}
-                  alt={p.title}
-                  width={265}
-                  height={314}
-                  className=" object-contain border"
-                />
-<<<<<<< Updated upstream
-              )}
-              <h2 className="text-base font-semibold">{p.title}</h2>
-              <p className="text-gray-700 mt-1 text-sm">{p.description}</p>
-              <div className="flex justify-between mt-2 w-full ">
-                <span className="font-medium">${p.price}</span>
-                <span className="text-sm text-gray-500">
-                  {p.inStock ? "In stock" : "Out of stock"}
-                </span>
-              </div>
-            </Link>
-          ))}
-=======
-                <path
-                  d="M9.82495 9.82422L11.75 11.7492"
-                  stroke="black"
-                  strokeWidth={1.5}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <div className="pl-[3px] flex overflow-x-auto gap-2 py-2">
-              {categories.map((cat, i) => (
-                <button
-                  key={i}
-                  className="flex-shrink-0 border px-3 py-1 rounded-md shadow-sm text-sm"
-                >
-                  {cat} category
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div
-            className={`grid gap-4 flex-1 ${open && isMobile ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-3"
-              }`}
-          >
-            {/*  {products.map((p) => (
-              <Link
-                href={`/products/${p.slug}`}
-                key={p.id}
-                className="border p-4 rounded-md shadow-sm"
-              >
-                {p.media[0] && (
-                  <img
+                <Link href={`/products/${p.slug}`} className="mb-3">
+                  <Image
                     src={p.media[0]}
                     alt={p.title}
+                    width={265}
+                    height={314}
                     className="w-full object-cover rounded-md"
                   />
-                )}
-                <h2 className="text-lg font-semibold">{p.title}</h2>
+                </Link>
+              )}
+
+              <div className="flex-1">
+                <Link href={`/products/${p.slug}`}>
+                  <h2 className="text-lg font-semibold">{p.title}</h2>
+                </Link>
                 <p className="text-gray-700 mt-1">{p.description}</p>
-                <div className="flex justify-between mt-2">
+                <div className="flex justify-between mt-2 items-center">
                   <span className="font-medium">${p.price}</span>
                   <span className="text-sm text-gray-500">
                     {p.inStock ? "In stock" : "Out of stock"}
                   </span>
                 </div>
-              </Link>
-            ))} */}
-            {products.map((p) => (
-              <div key={p.id} className="border p-4 rounded-md shadow-sm flex flex-col">
-                {p.media[0] && (
-                  <Link href={`/products/${p.slug}`} className="mb-3">
-                    <img src={p.media[0]} alt={p.title} className="w-full object-cover rounded-md" />
-                  </Link>
-                )}
-
-                <div className="flex-1">
-                  <Link href={`/products/${p.slug}`}>
-                    <h2 className="text-lg font-semibold">{p.title}</h2>
-                  </Link>
-                  <p className="text-gray-700 mt-1">{p.description}</p>
-                  <div className="flex justify-between mt-2 items-center">
-                    <span className="font-medium">${p.price}</span>
-                    <span className="text-sm text-gray-500">{p.inStock ? "In stock" : "Out of stock"}</span>
-                  </div>
-                </div>
-
-                <div className="mt-3">
-                  <AddToCartButton product={p} />
-                </div>
               </div>
-            ))}
 
-          </div>
->>>>>>> Stashed changes
+              <div className="mt-3">
+                <AddToCartButton product={p} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
