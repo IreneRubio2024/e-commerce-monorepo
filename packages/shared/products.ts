@@ -5,7 +5,7 @@ export type Product = {
   price: number;
   inStock: boolean;
   slug: string;
-  media: string;
+  media: string[];
   detailMedia: string[];
   category: string;
 };
@@ -18,9 +18,8 @@ const STRAPI_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "http://localhost:1337";
 
-const API_URL = `${STRAPI_URL}/api/products?populate=*;
+const API_URL = `${STRAPI_URL}/api/products?populate=*`;
 
->>>>>>> Stashed changes
 export async function fetchProducts(): Promise<Product[]> {
   try {
     const res = await fetch(API_URL);
@@ -38,17 +37,18 @@ export async function fetchProducts(): Promise<Product[]> {
           return url
             ? url.startsWith("http")
               ? url
-              : `http://localhost:1337${url}`
+              : `${STRAPI_URL}${url}`
             : null;
         })
         .filter(Boolean) as string[];
+
       const detailUrls: string[] = (item.detailMedia ?? [])
         .map((m: any) => {
           const url = m?.url;
           return url
             ? url.startsWith("http")
               ? url
-              : `http://localhost:1337${url}`
+              : `${STRAPI_URL}${url}`
             : null;
         })
         .filter(Boolean) as string[];
@@ -73,5 +73,45 @@ export async function fetchProducts(): Promise<Product[]> {
   }
 }
 
+export async function fetchProduct(slug: string): Promise<Product | null> {
+  const res = await fetch(
+    `${STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate=*`,
+    { next: { revalidate: 60 } }
+  );
 
+  if (!res.ok) throw new Error("Failed to fetch product");
 
+  const json = await res.json();
+  const item = json.data?.[0];
+  if (!item) return null;
+
+  const attrs = item.attributes ?? item;
+  const mediaField = attrs.media?.data ?? attrs.media ?? [];
+  const detailMediaField = attrs.detailMedia?.data ?? attrs.detailMedia ?? [];
+
+  const toUrls = (field: any[]) =>
+    Array.isArray(field)
+      ? field
+          .map((m) => {
+            const url = m?.attributes?.url ?? m?.url;
+            return url
+              ? url.startsWith("http")
+                ? url
+                : `${STRAPI_URL}${url}`
+              : null;
+          })
+          .filter(Boolean)
+      : [];
+
+  return {
+    id: item.id,
+    slug: attrs.slug,
+    title: attrs.title,
+    description: attrs.description,
+    price: attrs.price,
+    inStock: attrs.inStock,
+    category: attrs.category,
+    media: toUrls(mediaField),
+    detailMedia: toUrls(detailMediaField),
+  };
+}

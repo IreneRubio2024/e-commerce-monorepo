@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@repo/shared/*": ["../../packages/shared/*"],
+      "@repo/ui/*": ["../../packages/ui/*"]
     }
   },
   "include": [
@@ -11,7 +13,8 @@
     "**/*.tsx",
     "next-env.d.ts",
     "next.config.js",
-    ".next/types/**/*.ts"
-, "app/[slug]/page.js"  ],
+    ".next/types/**/*.ts",
+    "app/products/[slug]/page.tsx"
+  ],
   "exclude": ["node_modules"]
 }
