@@ -134,7 +134,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const { slug } = use(params);
 
   const [product, setProduct] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<Boolean>(true);
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
