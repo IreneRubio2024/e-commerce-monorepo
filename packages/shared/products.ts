@@ -89,15 +89,15 @@ export async function fetchProduct(slug: string): Promise<Product | null> {
   const toUrls = (field: any[]) =>
     Array.isArray(field)
       ? field
-        .map((m) => {
-          const url = m?.attributes?.url ?? m?.url;
-          return url
-            ? url.startsWith("http")
-              ? url
-              : `${STRAPI_URL}${url}`
-            : null;
-        })
-        .filter(Boolean)
+          .map((m) => {
+            const url = m?.attributes?.url ?? m?.url;
+            return url
+              ? url.startsWith("http")
+                ? url
+                : `${STRAPI_URL}${url}`
+              : null;
+          })
+          .filter(Boolean)
       : [];
 
   return {

@@ -120,7 +120,7 @@ export function useCart() {
   const updateQty = (productId: number, qty: number) =>
     dispatch({ type: "UPDATE_QTY", payload: { productId, qty } });
 
-  const clear = () => dispatch({ type: "CLEAR" });
+  const clearCart = () => dispatch({ type: "CLEAR" });
 
   const itemCount = state.items.reduce((s, it) => s + it.quantity, 0);
   const subtotal = state.items.reduce(
@@ -133,7 +133,7 @@ export function useCart() {
     addItem,
     removeItem,
     updateQty,
-    clear,
+    clearCart,
     itemCount,
     subtotal,
   };
