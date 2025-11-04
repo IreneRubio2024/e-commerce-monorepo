@@ -16,7 +16,7 @@ export default function Navbar({ open, setOpen }: Props) {
   return (
     <>
       <header className="fixed top-0 left-0 w-screen z-20 bg-white shadow-sm">
-        <div className="grid grid-cols-3 w-full px-[18px] py-[24px]">
+        <div className="grid grid-cols-3 w-full px-[18px] py-6">
           <div className="col-span-1 flex justify-start items-center gap-4">
             <button onClick={() => setOpen(!open)}>
               {!open ? (
@@ -68,9 +68,15 @@ export default function Navbar({ open, setOpen }: Props) {
             {/* NAVBAR LINKS (DESKTOP) */}
             <nav className="hidden lg:flex w-full">
               <ul className="flex justify-start items-center gap-4 w-full">
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/">Collections</Link></li>
-                <li><Link href="/">New</Link></li>
+                <li>
+                  <Link href="/">Home</Link>
+                </li>
+                <li>
+                  <Link href="/">Collections</Link>
+                </li>
+                <li>
+                  <Link href="/">New</Link>
+                </li>
               </ul>
             </nav>
           </div>
@@ -114,7 +120,12 @@ export default function Navbar({ open, setOpen }: Props) {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <circle cx="20.5" cy="20.5" r="20.5" fill="black" />
-                    <circle cx="20.5001" cy="20.4996" r="15.1852" fill="white" />
+                    <circle
+                      cx="20.5001"
+                      cy="20.4996"
+                      r="15.1852"
+                      fill="white"
+                    />
                     <path
                       d="M15.5116 25.277C16.276 26.2401 17.6987 26.2401 20.5439 26.2401H21.0035C23.8487 26.2401 25.2714 26.2401 26.0357 25.277M15.5116 25.277C14.7473 24.314 15.0094 22.8519 15.5338 19.9278C15.9067 17.8483 16.0931 16.8086 16.801 16.1943M15.5116 25.277C15.5116 25.277 15.5116 25.277 15.5116 25.277ZM26.0357 25.277C26.8001 24.314 26.5379 22.8519 26.0136 19.9278C25.6407 17.8483 25.4542 16.8086 24.7464 16.1943M26.0357 25.277C26.0357 25.277 26.0357 25.277 26.0357 25.277ZM24.7464 16.1943C24.0386 15.5801 23.0269 15.5801 21.0035 15.5801H20.5439C18.5205 15.5801 17.5088 15.5801 16.801 16.1943M24.7464 16.1943C24.7464 16.1943 24.7464 16.1943 24.7464 16.1943ZM16.801 16.1943C16.801 16.1943 16.801 16.1943 16.801 16.1943Z"
                       stroke="black"
@@ -196,14 +207,3 @@ export default function Navbar({ open, setOpen }: Props) {
     </>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
