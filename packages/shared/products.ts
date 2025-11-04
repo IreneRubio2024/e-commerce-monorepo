@@ -10,6 +10,9 @@ export type Product = {
   category: string;
 };
 
+<<<<<<< Updated upstream
+=======
+
 const STRAPI_URL =
   process.env.EXPO_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
