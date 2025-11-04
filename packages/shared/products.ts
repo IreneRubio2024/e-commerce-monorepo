@@ -11,7 +11,7 @@ export type Product = {
 };
 
 <<<<<<< Updated upstream
-const API_URL = "http://localhost:1337/api/products?populate=*";
+// const API_URL = "http://localhost:1337/api/products?populate=*";
 =======
 
 const STRAPI_URL =
