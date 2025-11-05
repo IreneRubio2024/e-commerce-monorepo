@@ -35,7 +35,6 @@ export default function ProductPage({ params }: ProductPageProps) {
     getProduct();
   }, [slug]);
 
-
   const handleAddToCart = () => {
     if (!product) return;
 
@@ -53,11 +52,9 @@ export default function ProductPage({ params }: ProductPageProps) {
     if (!product) return;
     addItem(product, 1);
 
-
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
   };
-
 
   if (loading) return <p>Loading...</p>;
   if (!product) return <p>Product not found</p>;
@@ -75,8 +72,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                 src={img}
                 alt={`${product.title} thumbnail ${i + 1}`}
                 onClick={() => setSelectedImage(img)}
-                className={`w-20 h-24 object-cover rounded-md cursor-pointer border ${selectedImage === img ? "border-black" : "border-gray-300"
-                  } hover:border-black transition`}
+                className={`w-20 h-24 object-cover rounded-md cursor-pointer border ${
+                  selectedImage === img ? "border-black" : "border-gray-300"
+                } hover:border-black transition`}
               />
             ))}
           </div>
@@ -96,13 +94,17 @@ export default function ProductPage({ params }: ProductPageProps) {
             ${product.price?.toLocaleString("en-US")}
           </p>
           <p className="text-gray-700 mb-6">{product.description}</p>
+          <p className=" text-gray-500">
+            {product.inStock ? "In stock" : "Out of stock"}
+          </p>
           <button
             onClick={handleAddToCart}
             disabled={added}
-            className={`w-full py-3 rounded font-medium transition ${added
-              ? "bg-green-600 text-white"
-              : "bg-gray-200 text-gray-800 hover:bg-black hover:text-white"
-              }`}
+            className={`w-full py-3 rounded font-medium transition ${
+              added
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-800 hover:bg-black hover:text-white"
+            }`}
           >
             {added ? "ADDED ✓" : "ADD TO CART"}
           </button>
@@ -111,14 +113,6 @@ export default function ProductPage({ params }: ProductPageProps) {
     </main>
   );
 }
-
-
-
-
-
-
-
-
 
 /* "use client";
 
