@@ -11,6 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.9.2",
     "@repo/shared": "*",
     "@repo/ui": "*",
     "next": "^15.5.0",
@@ -21,13 +22,13 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.34.0",
     "tailwindcss": "^4.1.16",
-    "@tailwindcss/postcss": "^4.1.16",
     "typescript": "5.9.2"
   }
 }
