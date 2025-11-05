@@ -10,14 +10,14 @@ interface Props {
 }
 
 export default function Navbar({ open, setOpen }: Props) {
-  const { itemCount } = useCart(); // 👈 get live cart count
+  const { itemCount } = useCart();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-screen z-20 bg-white shadow-sm">
-        <div className="grid grid-cols-3 w-full px-[18px] py-6">
-          <div className="col-span-1 flex justify-start items-center gap-4">
+      <header className="fixed top-0 left-0 w-screen z-20">
+        <div className="grid grid-cols-3 w-full px-[18px] lg:px-[50px] mt-[50px]">
+          <div className="col-span-1 flex justify-start items-center gap-[40px]">
             <button onClick={() => setOpen(!open)}>
               {!open ? (
                 <svg
@@ -66,8 +66,8 @@ export default function Navbar({ open, setOpen }: Props) {
             </button>
 
             {/* NAVBAR LINKS (DESKTOP) */}
-            <nav className="hidden lg:flex w-full">
-              <ul className="flex justify-start items-center gap-4 w-full">
+            <nav className="hidden lg:flex w-full ">
+              <ul className="flex justify-start items-center text-[14px] gap-[40px] font-semibold w-full">
                 <li>
                   <Link href="/">Home</Link>
                 </li>
@@ -108,7 +108,7 @@ export default function Navbar({ open, setOpen }: Props) {
 
           {/* RIGHT BUTTONS */}
           <div>
-            <ul className="col-start-3 col-span-1 flex justify-end items-center gap-x-[9px]">
+            <ul className="col-start-3 col-span-1 flex justify-end items-center gap-x-[18px]">
               {/* Example icon (search, profile) */}
               <li>
                 <Link href="/">
