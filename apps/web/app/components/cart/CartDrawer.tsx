@@ -1,4 +1,6 @@
 "use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useState } from "react";
 import { useCart } from "./CartProvider";
@@ -16,6 +18,7 @@ export default function CartDrawer({
     useCart();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleCheckout = async () => {
     if (!items.length) return;
@@ -40,9 +43,12 @@ export default function CartDrawer({
         orderStatus: "pending",
       });
 
-      setMessage("✅ Order created successfully!");
-      clearCart();
-      console.log("Order created:", newOrder);
+      console.log("Order ID:", newOrder.data?.id);
+
+      const orderStatus = newOrder.data?.attributes?.orderStatus ?? "unknown";
+      console.log("Order Status:", orderStatus);
+
+      router.push(`/checkout?orderId=${newOrder.data?.id}`);
     } catch (err: any) {
       console.error(err);
       setMessage("❌ Failed to create order.");

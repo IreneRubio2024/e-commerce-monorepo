@@ -10,6 +10,21 @@ export interface Order {
   orderStatus?: "pending" | "paid" | "shipped" | "completed" | "cancelled";
 }
 
+export interface StrapiOrderResponse {
+  data: {
+    id: number;
+    attributes: {
+      total: number;
+      orderStatus: string;
+      items: any[];
+      createdAt: string;
+      updatedAt: string;
+      publishedAt?: string;
+    };
+  };
+  meta?: Record<string, any>;
+}
+
 const STRAPI_URL =
   process.env.EXPO_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
@@ -17,13 +32,7 @@ const STRAPI_URL =
 
 const API_URL = `${STRAPI_URL}/api/orders`;
 
-export async function createOrder(order: Order) {
-  const formattedItems = order.items.map((item) => ({
-    product: item.product, // numeric ID array
-    quantity: item.quantity,
-    price: item.price,
-  }));
-
+export async function createOrder(order: Order): Promise<StrapiOrderResponse> {
   const payload = {
     data: {
       items: order.items.map((item) => ({
