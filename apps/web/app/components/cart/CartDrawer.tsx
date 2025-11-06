@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useCart } from "./CartProvider";
 import { createOrder, OrderItem } from "@repo/shared/orders";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
 
 export default function CartDrawer({
   open,
@@ -64,11 +66,11 @@ export default function CartDrawer({
       }`}
       aria-hidden={!open}
     >
-      <div className="p-4 border-b flex justify-between items-center">
+      <div className="p-[2rem] border-b flex justify-between items-center">
         <h3 className="text-lg font-semibold">Shopping Cart ({itemCount})</h3>
-        <button onClick={onClose} className="text-sm opacity-70">
+        <Button onClick={onClose} className="">
           Close
-        </button>
+        </Button>
       </div>
 
       <div
@@ -79,9 +81,9 @@ export default function CartDrawer({
           <div className="text-center opacity-60 py-8">Your cart is empty</div>
         ) : (
           items.map((it) => (
-            <div key={it.product.id} className="flex gap-3 items-center mb-4">
+            <div key={it.product.id} className="flex customGap items-center mb-[2rem]">
               {it.product.media?.[0] ? (
-                // keep it simple: use <img> so not to require next/image remote config
+          
                 <Image
                   src={it.product.media[0]}
                   alt={it.product.title}
@@ -97,27 +99,27 @@ export default function CartDrawer({
                 <div className="text-sm opacity-60">
                   ${it.product.price.toFixed(2)}
                 </div>
-                <div className="mt-2 flex items-center gap-2">
-                  <button
+                <div className="mt-[1rem] flex items-center customGap">
+                  <Button
                     onClick={() => updateQty(it.product.id, it.quantity - 1)}
-                    className="px-2 py-1 border rounded"
+                    className=""
                   >
                     -
-                  </button>
-                  <div className="px-2">{it.quantity}</div>
-                  <button
+                  </Button>
+                  <div className="px-[1rem]">{it.quantity}</div>
+                  <Button
                     onClick={() => updateQty(it.product.id, it.quantity + 1)}
-                    className="px-2 py-1 border rounded"
+                    className=""
                   >
                     +
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     onClick={() => removeItem(it.product.id)}
-                    className="ml-auto text-sm opacity-60"
+                    className=""
                   >
                     Remove
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -125,20 +127,20 @@ export default function CartDrawer({
         )}
       </div>
 
-      <div className="p-4 border-t">
+      <div className="p-[2rem] border-t">
         <div className="flex justify-between items-center">
           <div className="text-sm opacity-70">Subtotal</div>
           <div className="font-semibold">${subtotal.toFixed(2)}</div>
         </div>
 
         <div className="mt-4">
-          <button
+          <Button
             onClick={handleCheckout}
             disabled={loading || !items.length}
-            className="w-full py-2 rounded bg-black text-white"
+            className=""
           >
             {loading ? "Processing..." : "Checkout"}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

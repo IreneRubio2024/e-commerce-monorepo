@@ -11,6 +11,10 @@
   }
 }
 
+.customGap {
+  gap: 2rem;
+}
+
 @theme inline {
   --font-sans: Work Sans, ui-sans-serif, sans-serif, system-ui;
   --font-mono: VT323, ui-monospace, monospace;

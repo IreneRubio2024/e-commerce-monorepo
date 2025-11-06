@@ -60,3 +60,21 @@ export async function createOrder(order: Order): Promise<StrapiOrderResponse> {
 
   return res.json();
 }
+
+export async function updateOrderStatus(
+  orderId: number,
+  status: Order["orderStatus"]
+): Promise<StrapiOrderResponse> {
+  const res = await fetch(`${API_URL}/${orderId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: { orderStatus: status } }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Failed to update order: ${err}`);
+  }
+
+  return res.json();
+}

@@ -75,15 +75,15 @@ export default function Home() {
         <MainWrapper>
     
           {/* Sidebar / Filter */}
-          <aside className="col-span-4 flex flex-col bg-white ">
-  <h2 className="text-xl font-semibold ">Filter</h2>
+          <aside className="col-span-4 flex flex-col bg-white customGap p-4 border">
+  <h2 className="text-lg font-semibold mb-4 ">Filter</h2>
 
-  <div className="flex flex-col">
+  <div className="flex flex-col customGap">
     {/* Availability */}
-    <div className="flex flex-col border-b border-dotted border-gray-300 ">
+    <div className="flex flex-col border-b border-dotted border-gray-300 customGap pb-[1rem]  ">
       <h3 className=" text-base font-medium">Availability</h3>
 
-      <Label htmlFor="inStock" className="flex items-center gap-2 cursor-pointer select-none">
+      <Label htmlFor="inStock" className="flex items-center customGap cursor-pointer select-none">
         <Checkbox
           id="inStock"
           checked={onlyInStock}
@@ -100,10 +100,10 @@ export default function Home() {
 
 
           {/* Main content */}
-          <section className="col-span-8 flex flex-col">
+          <section className="col-span-8 flex flex-col customGap">
             {/* Header */}
-            <div className="flex flex-col gap-2 ">
-              <span className="flex opacity-60 text-sm gap-2 font-semibold">
+            <div className="flex flex-col customGap ">
+              <span className="flex opacity-60 text-sm customGap font-semibold">
                 <Link href="/">Home</Link> /{" "}
                 <Link href="/" className="opacity-30">
                   Products
@@ -113,7 +113,7 @@ export default function Home() {
                 Products
               </h1>
             </div>
-            <div className=" flex flex-row w-full gap-10 ">
+            <div className=" flex flex-row w-full customGap ">
             <div className="relative w-1/2">
             <Input type="text"
     placeholder="Search products..."
@@ -144,7 +144,7 @@ export default function Home() {
   </svg>
 </div>
 
-              <div className="flex flex-wrap  uppercase">
+              <div className="flex flex-wrap  uppercase customGap">
                 <Button
                   onClick={() => setSelectedCategory(null)}
                   className={` `}
@@ -164,14 +164,14 @@ export default function Home() {
             </div>
 
             {/* Product grid */}
-            <div className="grid grid-cols-3 ">
+            <div className="grid grid-cols-3 customGap ">
               {filteredProducts.length === 0 ? (
                 <div className="opacity-60 text-center col-span-full ">
                   No products found
                 </div>
               ) : (
                 filteredProducts.map((p) => (
-                  <Card key={p.id} className="">
+                  <Card key={p.id} className=" rounded-none border-none">
                     {p.media?.[0] && (
                       <Link href={`/products/${p.slug}`}>
                         <Image

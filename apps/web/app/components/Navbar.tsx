@@ -16,8 +16,8 @@ export default function Navbar({ open, setOpen }: Props) {
   return (
     <>
       <header className="fixed top-0 left-0 w-screen z-20">
-        <div className="grid grid-cols-3 w-full px-[18px] lg:px-[50px] mt-[50px]">
-          <div className="col-span-1 flex justify-start items-center gap-[40px]">
+        <div className="grid grid-cols-3 w-full  px-16 mt-8">
+          <div className="col-span-1 flex justify-start items-center customGap">
             <button onClick={() => setOpen(!open)}>
               {!open ? (
                 <svg
@@ -67,7 +67,7 @@ export default function Navbar({ open, setOpen }: Props) {
 
             {/* NAVBAR LINKS (DESKTOP) */}
             <nav className="hidden lg:flex w-full ">
-              <ul className="flex justify-start items-center text-[14px] gap-[40px] font-semibold w-full">
+              <ul className="flex justify-start items-center text-sm font-semibold customGap w-full">
                 <li>
                   <Link href="/">Home</Link>
                 </li>
@@ -108,7 +108,7 @@ export default function Navbar({ open, setOpen }: Props) {
 
           {/* RIGHT BUTTONS */}
           <div>
-            <ul className="col-start-3 col-span-1 flex justify-end items-center gap-x-[18px]">
+            <ul className="col-start-3 col-span-1 flex justify-end items-center customGap">
               {/* Example icon (search, profile) */}
               <li>
                 <Link href="/">
@@ -191,7 +191,7 @@ export default function Navbar({ open, setOpen }: Props) {
                   </svg>
 
                   {itemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-[11px] w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                       {itemCount}
                     </span>
                   )}
