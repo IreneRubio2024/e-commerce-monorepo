@@ -6,6 +6,15 @@ import Navbar from "./components/Navbar";
 import Link from "next/link";
 import Image from "next/image";
 import MobileProductPageLayout from "./components/MobileProductPageLayout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import MainWrapper from "./components/MainWrapper";
+
+
+
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -48,8 +57,8 @@ export default function Home() {
   });
 
   return (
-    <main className="layout min-h-screen bg-white">
-      <Navbar open={open} setOpen={setOpen} />
+    <main className=" min-h-screen bg-white">
+ <Navbar open={open} setOpen={setOpen} />
 
       {isMobile ? (
         <MobileProductPageLayout
@@ -63,36 +72,37 @@ export default function Home() {
           setOnlyInStock={setOnlyInStock}
         />
       ) : (
-        // DESKTOP LAYOUT
-        <div className="col-span-12 grid lg:grid-cols-12 lg:gap-10 mt-[7.7rem]">
+        <MainWrapper>
+    
           {/* Sidebar / Filter */}
-          <aside className="col-span-4 flex flex-col bg-white p-4">
-            <h2 className="text-xl font-semibold mb-8">Filter</h2>
-            <div className="flex flex-col">
-              <span className="flex flex-col pb-[0.875rem] border-b border-dotted border-gray-300 mb-8">
-                <h3 className="mb-[1.125rem]">Availability</h3>
-                <div className="flex items-center gap-[0.56rem]">
-                  <input
-                    type="checkbox"
-                    id="inStock"
-                    checked={onlyInStock}
-                    onChange={(e) => setOnlyInStock(e.target.checked)}
-                    className="w-[1.375rem] aspect-square rounded-none"
-                  />
-                  <label htmlFor="inStock" className="text-sm">
-                    Show only in stock
-                  </label>
-                </div>
-              </span>
+          <aside className="col-span-4 flex flex-col bg-white ">
+  <h2 className="text-xl font-semibold ">Filter</h2>
 
-              {/* Category buttons */}
-            </div>
-          </aside>
+  <div className="flex flex-col">
+    {/* Availability */}
+    <div className="flex flex-col border-b border-dotted border-gray-300 ">
+      <h3 className=" text-base font-medium">Availability</h3>
+
+      <Label htmlFor="inStock" className="flex items-center gap-2 cursor-pointer select-none">
+        <Checkbox
+          id="inStock"
+          checked={onlyInStock}
+          onCheckedChange={(checked) => setOnlyInStock(!!checked)}
+          className=""
+        />
+        <span>Show only in stock</span>
+      </Label>
+    </div>
+
+    {/* Category buttons can go here */}
+  </div>
+</aside>
+
 
           {/* Main content */}
           <section className="col-span-8 flex flex-col">
             {/* Header */}
-            <div className="flex flex-col gap-2 mb-8">
+            <div className="flex flex-col gap-2 ">
               <span className="flex opacity-60 text-sm gap-2 font-semibold">
                 <Link href="/">Home</Link> /{" "}
                 <Link href="/" className="opacity-30">
@@ -104,66 +114,64 @@ export default function Home() {
               </h1>
             </div>
             <div className=" flex flex-row w-full gap-10 ">
-              <div className="flex items-center justify-between w-1/2 p-3 bg-gray-300 ">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full text-left text-base outline-none"
-                />
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 13 13"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="5.97502"
-                    cy="5.97502"
-                    r="5.22502"
-                    stroke="black"
-                    strokeWidth={1.5}
-                  />
-                  <path
-                    d="M9.82495 9.82422L11.75 11.7492"
-                    stroke="black"
-                    strokeWidth={1.5}
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-              <div className="flex flex-wrap gap-2 text-[0.625rem] uppercase">
-                <button
+            <div className="relative w-1/2">
+            <Input type="text"
+    placeholder="Search products..."
+    className="pr-8" 
+  />
+
+  <svg
+    className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-black pointer-events-none"
+    width="13"
+    height="13"
+    viewBox="0 0 13 13"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle
+      cx="5.97502"
+      cy="5.97502"
+      r="5.22502"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    />
+    <path
+      d="M9.82495 9.82422L11.75 11.7492"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+    />
+  </svg>
+</div>
+
+              <div className="flex flex-wrap  uppercase">
+                <Button
                   onClick={() => setSelectedCategory(null)}
-                  className={`h-[1.5rem] w-[6.25rem] border ${
-                    !selectedCategory ? "bg-black text-white" : ""
-                  }`}
+                  className={` `}
                 >
                   All
-                </button>
+                </Button>
                 {categories.map((cat) => (
-                  <button
+                  <Button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`h-[1.5rem] w-[6.25rem] border ${
-                      selectedCategory === cat ? "bg-black text-white" : ""
-                    }`}
+                    className={``}
                   >
                     {cat}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
 
             {/* Product grid */}
-            <div className="grid grid-cols-3 gap-10 mt-10">
+            <div className="grid grid-cols-3 ">
               {filteredProducts.length === 0 ? (
-                <div className="opacity-60 text-center col-span-full py-12">
+                <div className="opacity-60 text-center col-span-full ">
                   No products found
                 </div>
               ) : (
                 filteredProducts.map((p) => (
-                  <div key={p.id} className="flex flex-col">
+                  <Card key={p.id} className="">
                     {p.media?.[0] && (
                       <Link href={`/products/${p.slug}`}>
                         <Image
@@ -171,26 +179,33 @@ export default function Home() {
                           alt={p.title}
                           width={265}
                           height={314}
-                          className="w-full object-cover border mb-[0.875rem]"
+                          className="w-full object-cover border "
                         />
                       </Link>
                     )}
-                    <div className="flex flex-col">
-                      <p className="mb-[0.75rem]">{p.category}</p>
-                      <div className="flex justify-between items-center mb-[0.875rem]">
-                        <Link href={`/products/${p.slug}`}>
-                          <h3>{p.title}</h3>
-                        </Link>
-                        <h3>${p.price}</h3>
-                      </div>
-                    </div>
-                  </div>
+                     <CardContent className="p-4 flex flex-col gap-2">
+    {/* Category */}
+    <p className="text-sm text-gray-500">{p.category}</p>
+
+    {/* Title + Price */}
+    <div className="flex justify-between items-center">
+      <Link href={`/products/${p.slug}`}>
+        <CardTitle className="text-base font-medium hover:underline">
+          {p.title}
+        </CardTitle>
+      </Link>
+      <span className="text-base font-semibold">${p.price}</span>
+    </div>
+  </CardContent>
+                  </Card>
                 ))
               )}
             </div>
           </section>
-        </div>
+    
+        </MainWrapper>
       )}
+
     </main>
   );
 }
