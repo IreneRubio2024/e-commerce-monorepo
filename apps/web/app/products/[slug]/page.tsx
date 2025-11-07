@@ -59,7 +59,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Main Image */}
           <div className="relative flex-1 w-full h-[60vh] lg:h-[80vh] rounded-md overflow-hidden">
             <Image
-              src={selectedImage || product.media?.[0]}
+              src={
+                selectedImage?.includes("http")
+                  ? selectedImage
+                  : `/api/images/${selectedImage}`
+              }
               alt={product.title}
               fill
               priority
@@ -90,7 +94,6 @@ export default function ProductPage({ params }: ProductPageProps) {
           )}
         </div>
 
-      
         <div className="col-span-12 lg:col-span-4 p-4 lg:p-0 flex items-start">
           <Card className="border w-full">
             <CardContent className="flex flex-col gap-6 p-8">

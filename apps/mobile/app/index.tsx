@@ -10,6 +10,7 @@ import {
   TextInput,
   View,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
@@ -21,6 +22,8 @@ import {
   search,
   placeholder,
 } from "@/assets/images";
+import { useRouter } from "expo-router";
+
 import { fetchProducts, type Product } from "@repo/shared/products";
 
 const { width: screenWidth } = Dimensions.get("window");
@@ -38,9 +41,11 @@ export default function HomeScreen() {
     "Sneakers",
     "Bags",
   ]);
+  const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   // --- Animation setup ---
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -57,18 +62,18 @@ export default function HomeScreen() {
   const filterAnimatedStyle = {
     left: slideAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [-screenWidth * 0.5, 0], // hidden → visible
+      outputRange: [-screenWidth * 0.5, 0], 
     }),
   };
 
   const contentAnimatedStyle = {
     marginLeft: slideAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, screenWidth * 0.5], // moves to middle
+      outputRange: [0, screenWidth * 0.5], 
     }),
   };
 
-  // --- Load products from Strapi ---
+
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -124,13 +129,7 @@ export default function HomeScreen() {
             <Text style={styles.filterTitle}>Size</Text>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              {["S", "M", "L", "XL"].map((size) => (
-                <View key={size} style={styles.categoryBox}>
-                  <Text>{size}</Text>
-                </View>
-              ))}
-            </View>
+            ></View>
 
             <Pressable onPress={() => setOpenFilter(false)}>
               <Text style={styles.close}>Close</Text>
@@ -165,13 +164,12 @@ export default function HomeScreen() {
                 numColumns={openFilter ? 1 : 2}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                  <View
+                  <TouchableOpacity
                     style={[
                       styles.productCard,
-                      {
-                        width: openFilter ? "100%" : "48%",
-                      },
+                      { width: openFilter ? "100%" : "48%" },
                     ]}
+                    onPress={() => router.push(`./products/${item.slug}`)}
                   >
                     <View style={{ width: "100%", aspectRatio: 3 / 4 }}>
                       <Image
@@ -195,15 +193,15 @@ export default function HomeScreen() {
                       <Text style={{ fontSize: 18 }}>{item.title}</Text>
                       <Text style={{ fontSize: 18 }}>{`$ ${item.price}`}</Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 )}
                 columnWrapperStyle={
                   openFilter
                     ? { flexDirection: "column" }
                     : {
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                    }
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                      }
                 }
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{

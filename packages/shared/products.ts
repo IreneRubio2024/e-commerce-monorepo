@@ -73,7 +73,7 @@ export async function fetchProducts(): Promise<Product[]> {
 export async function fetchProduct(slug: string): Promise<Product | null> {
   const res = await fetch(
     `${STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate=*`,
-    { next: { revalidate: 60 } }
+   
   );
 
   if (!res.ok) throw new Error("Failed to fetch product");
