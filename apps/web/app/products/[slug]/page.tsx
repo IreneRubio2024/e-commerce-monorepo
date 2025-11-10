@@ -29,7 +29,10 @@ export default function ProductPage({ params }: ProductPageProps) {
         setProduct(data);
 
         // Combine media + detailMedia for thumbnails
-        const allImages = [...(data.media || []), ...(data.detailMedia || [])];
+        const allImages = [
+          ...(data?.media || []),
+          ...(data?.detailMedia || []),
+        ];
         setSelectedImage(allImages[0] || null);
       } catch (error) {
         console.error("Error fetching product:", error);
