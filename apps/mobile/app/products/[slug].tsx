@@ -7,17 +7,16 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
- 
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
-
 import { fetchProduct, type Product } from "@repo/shared/products";
-import { useCart } from "../context/cart-Context-mobile"; 
+import { useCart } from "../context/cart-Context-mobile";
 
 import { logo, filterBar, profile, cart } from "@/assets/images";
+import { Navbar } from "@/components/navbar";
 
 export default function ProductDetailPage() {
   const router = useRouter();
@@ -74,27 +73,7 @@ export default function ProductDetailPage() {
 
   return (
     <SafeAreaView style={styles.page}>
-    
-      <View style={styles.navbar}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Image source={filterBar} style={{ width: 26, height: 16 }} />
-        </TouchableOpacity>
-
-        <Image source={logo} style={{ width: 29, height: 29 }} />
-
-        <View style={styles.right}>
-          <TouchableOpacity onPress={() => router.push("./cart")}>
-            <Image source={cart} style={{ width: 41, height: 41 }} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginLeft: 8 }}
-            onPress={() => router.push("./profile")}
-          >
-            <Image source={profile} style={{ width: 41, height: 41 }} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
+      <Navbar />
 
       <ScrollView contentContainerStyle={styles.container}>
         {selectedImage && (
@@ -105,7 +84,6 @@ export default function ProductDetailPage() {
           />
         )}
 
- 
         <ScrollView horizontal style={styles.thumbnailScroll}>
           {product.detailMedia?.map((img, i) => (
             <TouchableOpacity key={i} onPress={() => setSelectedImage(img)}>
@@ -121,7 +99,6 @@ export default function ProductDetailPage() {
           ))}
         </ScrollView>
 
-   
         <Text style={styles.title}>{product.title}</Text>
         <Text style={styles.price}>{`$ ${product.price}`}</Text>
         <Text style={styles.description}>{product.description}</Text>
@@ -134,7 +111,6 @@ export default function ProductDetailPage() {
           {product.inStock ? "In stock" : "Out of stock"}
         </Text>
 
-      
         <TouchableOpacity
           style={[styles.addButton, added && styles.addedButton]}
           onPress={handleAddToCart}
@@ -153,18 +129,6 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  navbar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  right: {
-    flexDirection: "row",
-    alignItems: "center",
   },
   container: {
     padding: 16,

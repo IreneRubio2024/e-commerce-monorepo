@@ -25,6 +25,7 @@ import {
 import { useRouter } from "expo-router";
 
 import { fetchProducts, type Product } from "@repo/shared/products";
+import { Navbar } from "@/components/navbar";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -46,7 +47,6 @@ export default function HomeScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-
   // --- Animation setup ---
   const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -62,17 +62,16 @@ export default function HomeScreen() {
   const filterAnimatedStyle = {
     left: slideAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [-screenWidth * 0.5, 0], 
+      outputRange: [-screenWidth * 0.5, 0],
     }),
   };
 
   const contentAnimatedStyle = {
     marginLeft: slideAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, screenWidth * 0.5], 
+      outputRange: [0, screenWidth * 0.5],
     }),
   };
-
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -87,23 +86,12 @@ export default function HomeScreen() {
     };
     loadProducts();
   }, []);
-
+  console.log(Navbar);
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         {/* Navbar */}
-        <View style={styles.navbar}>
-          <View style={styles.left}>
-            <Image source={filterBar} style={{ width: 26, height: 16 }} />
-          </View>
-          <View style={styles.center}>
-            <Image source={logo} style={{ width: 29, height: 29 }} />
-          </View>
-          <View style={styles.right}>
-            <Image source={cart} style={{ width: 41, height: 41 }} />
-            <Image source={profile} style={{ width: 41, height: 41 }} />
-          </View>
-        </View>
+        <Navbar />
 
         {/* Header */}
         <View style={styles.headerBox}>
@@ -218,20 +206,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  navbar: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingTop: 24,
-    paddingHorizontal: 18,
-  },
-  left: { flex: 1 },
-  center: { flex: 1, alignItems: "center" },
-  right: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    gap: 6,
-  },
   headerBox: {
     flexDirection: "row",
     justifyContent: "center",
