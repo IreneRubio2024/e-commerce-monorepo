@@ -6,7 +6,7 @@ export default function Cart() {
     <SafeAreaProvider>
       <SafeAreaView>
         <View>
-          <Text>Cart page</Text>
+          <Text>Checkout page</Text>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

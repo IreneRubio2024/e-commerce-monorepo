@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import { Link } from "expo-router";
 
 export function Navbar() {
   return (
@@ -16,9 +17,9 @@ export function Navbar() {
         <Image source={logo} style={{ width: 29, height: 29 }} />
       </View>
       <View style={styles.right}>
-        <TouchableOpacity>
+        <Link href="/cart">
           <Image source={cart} style={{ width: 41, height: 41 }} />
-        </TouchableOpacity>
+        </Link>
         <Image source={profile} style={{ width: 41, height: 41 }} />
       </View>
     </View>
