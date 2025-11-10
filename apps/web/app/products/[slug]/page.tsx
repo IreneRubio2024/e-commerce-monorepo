@@ -28,8 +28,8 @@ export default function ProductPage({ params }: ProductPageProps) {
         const data = await fetchProduct(slug);
         setProduct(data);
 
-        // Use main image from `media`, fallback to first detailed image
-        setSelectedImage(data?.media?.[0] || data?.detailMedia?.[0] || null);
+        const allImages = [...(data.media || []), ...(data.detailMedia || [])];
+        setSelectedImage(allImages[0] || null);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -53,50 +53,52 @@ export default function ProductPage({ params }: ProductPageProps) {
     <main className="bg-white min-h-screen">
       <Navbar open={open} setOpen={setOpen} />
 
-      <div className="grid grid-cols-12 customGap h-full px-0 mt-0 pb-8 lg:px-16 lg:pt-32">
+      <div className="grid grid-cols-12 customGap h-full px-0 pt-0 pb-8 lg:px-16 lg:pt-32">
         {/* ---------- LEFT SIDE: Image + Thumbnails ---------- */}
         <div className="col-span-12 lg:col-span-8 flex flex-col lg:flex-row-reverse items-start customGap relative h-full">
           {/* Main Image */}
-          <div className="relative flex-1 w-full h-[60vh] lg:h-[80vh] rounded-md overflow-hidden">
-            <Image
-              src={
-                selectedImage?.includes("http")
-                  ? selectedImage
-                  : `/api/images/${selectedImage}`
-              }
-              alt={product.title}
-              fill
-              priority
-              className="object-cover"
-            />
+          <div
+            className={`relative w-full rounded-md overflow-hidden 
+    min-h-[60vh] `}
+          >
+            {selectedImage && (
+              <Image
+                src={
+                  selectedImage.includes("http")
+                    ? selectedImage
+                    : `/api/images/${selectedImage}`
+                }
+                alt={product.title}
+                fill
+                className="object-contain"
+                priority
+              />
+            )}
           </div>
-
-          {/* Thumbnail list */}
-          {product.detailMedia?.length > 0 && (
-            <div className="flex lg:flex-col gap-2 p-4 lg:p-0 lg:mr-4 overflow-x-auto lg:overflow-y-auto">
-              {product.detailMedia.map((img: string, i: number) => (
-                <div
-                  key={i}
-                  className={`relative w-20 h-20 flex-shrink-0 cursor-pointer rounded-md border transition ${
-                    selectedImage === img ? "border-black" : "border-gray-300"
-                  } hover:border-black`}
-                  onClick={() => setSelectedImage(img)}
-                >
-                  <Image
-                    src={img}
-                    alt={`${product.title} detail ${i + 1}`}
-                    fill
-                    className="object-cover rounded-md"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="flex px-8 lg:px-0 lg:flex-col gap-[1rem]">
+            {/* Thumbnail list */}
+            {product.media.concat(product.detailMedia).map((img, i) => (
+              <div
+                key={i}
+                className={`relative w-20 h-20  cursor-pointer rounded-md border transition ${
+                  selectedImage === img ? "border-black" : "border-gray-300"
+                } hover:border-black`}
+                onClick={() => setSelectedImage(img)}
+              >
+                <Image
+                  src={img}
+                  alt={`${product.title} detail ${i + 1}`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="col-span-12 lg:col-span-4 p-4 lg:p-0 flex items-start">
+        <div className="col-span-12 lg:col-span-4 px-8 lg:p-0 flex items-start">
           <Card className="border w-full">
-            <CardContent className="flex flex-col gap-6 p-8">
+            <CardContent className="flex flex-col gap-[1rem] p-8 ">
               <div>
                 <h1 className="text-2xl font-bold mb-1">{product.title}</h1>
                 <p className="text-xl font-semibold">

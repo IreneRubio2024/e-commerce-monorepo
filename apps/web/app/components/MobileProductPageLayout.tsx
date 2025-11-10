@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@repo/shared/products";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 
 type MobileProps = {
   open: boolean;
@@ -24,76 +29,66 @@ export default function MobileProductPageLayout({
   setOnlyInStock,
 }: MobileProps) {
   return (
-    <div className="flex flex-col col-span-12">
+    <div className="flex flex-col col-span-12 px-8">
       {/* HEADER */}
-      <div className="flex flex-col items-center justify-center col-span-12 mt-[7.7rem] text-3xl font-extrabold tracking-wide ">
-        <span className="flex opacity-60 text-xs gap-2 font-semibold tracking-normal">
-          <Link href="/">Home</Link> /{" "}
-          <Link href="/" className="opacity-30">
-            Products
-          </Link>
-        </span>
-        <h1 className="text-3xl font-extrabold tracking-wide uppercase mb-5">
+      <div className="flex flex-col items-center justify-center col-span-12 mt-32 text-3xl font-extrabold tracking-wide ">
+        <h1 className="text-3xl font-extrabold tracking-wide uppercase mb-[2rem] ">
           Products
         </h1>
       </div>
 
       {/* SEARCH */}
-      <div className="col-span-12 flex  w-full">
-        <div className="flex items-center justify-between w-full p-3  bg-gray-300">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full text-left text-base outline-none"
+      <div className="col-span-12 flex  w-full mb-[1rem]">
+        <Input type="text" placeholder="Search products..." className="" />
+        {/* <svg
+          width="13"
+          height="13"
+          viewBox="0 0 13 13"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="5.97502"
+            cy="5.97502"
+            r="5.22502"
+            stroke="black"
+            strokeWidth={1.5}
           />
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 13 13"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="5.97502"
-              cy="5.97502"
-              r="5.22502"
-              stroke="black"
-              strokeWidth={1.5}
-            />
-            <path
-              d="M9.82495 9.82422L11.75 11.7492"
-              stroke="black"
-              strokeWidth={1.5}
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+          <path
+            d="M9.82495 9.82422L11.75 11.7492"
+            stroke="black"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+          />
+        </svg> */}
       </div>
 
       {/* MOBILE FILTER */}
-      <div className="flex flex-col mt-4">
-        <button
+      <div className="flex flex-col gap-[0.5rem] ">
+        <Button
+          variant={open ? "secondary" : "default"}
           onClick={() => setOpen(!open)}
-          className="flex justify-start gap-[0.56rem] items-center text-lg font-semibold pr-[0.19rem] w-full"
+          className="items-start justify-start "
         >
-          Filter <span>{open ? "<" : ">"}</span>
-        </button>
+          {open ? "Close Filter" : "Filter"}
+        </Button>
 
         {open && (
-          <div className="flex flex-col mt-6">
-            <span className="flex flex-col pb-[0.875rem] border-b border-dotted border-gray-300 mb-8">
-              <h3 className="mb-[1.125rem]">Availability</h3>
-              <div className="flex items-center gap-[0.56rem]">
-                <input
-                  type="checkbox"
+          <div className="flex flex-col customGap p-[1rem]  mt-[0.5rem] bg-secondary ">
+            <span className="flex flex-col border-b border-dotted border-gray-300 pb-[1rem] ">
+              <h3 className=" mb-[0.5rem] font-semibold text-sm">
+                Availability
+              </h3>
+              <div className="flex items-center gap-[1rem]">
+                <Checkbox
                   id="inStock"
                   checked={onlyInStock}
-                  onChange={(e) => setOnlyInStock(e.target.checked)}
-                  className="w-[1.375rem] aspect-square rounded-none"
+                  onCheckedChange={(checked) => setOnlyInStock(!!checked)}
+                  className="aspect-square rounded-none"
                 />
-                <label htmlFor="inStock" className="text-sm">
+                <Label htmlFor="inStock" className="text-sm">
                   Show only in stock
-                </label>
+                </Label>
               </div>
             </span>
 
@@ -102,32 +97,28 @@ export default function MobileProductPageLayout({
         )}
 
         {/* CATEGORY SCROLL */}
-        <div className="flex lg:hidden overflow-x-auto gap-2 py-2 text-[0.625rem] uppercase">
-          <button
+        <div className="sticky top-24 z-10 flex items-center justify-center overflow-x-auto py-2 gap-2 ">
+          <Button
+            variant={selectedCategory === null ? "default" : "secondary"}
             onClick={() => setSelectedCategory(null)}
-            className={`h-[1.5rem] w-[6.25rem] border ${
-              !selectedCategory ? "bg-black text-white" : ""
-            }`}
           >
             All
-          </button>
+          </Button>
           {categories.map((cat) => (
-            <button
+            <Button
               key={cat}
+              variant={selectedCategory === cat ? "default" : "secondary"}
               onClick={() => setSelectedCategory(cat)}
-              className={`h-[1.5rem] w-[6.25rem] border ${
-                selectedCategory === cat ? "bg-black text-white" : ""
-              }`}
             >
               {cat}
-            </button>
+            </Button>
           ))}
         </div>
 
         {/* PRODUCT LIST */}
         <div
-          className={`grid gap-10 mt-2  
-            grid-cols-2
+          className={`grid gap-[1rem]  
+            grid-cols-2 mt-[1rem]
           }`}
         >
           {filteredProducts.length === 0 ? (
@@ -136,28 +127,27 @@ export default function MobileProductPageLayout({
             </div>
           ) : (
             filteredProducts.map((p) => (
-              <div key={p.id} className="flex flex-col">
-                {p.media?.[0] && (
-                  <Link href={`/products/${p.slug}`}>
+              <Card key={p.id} className="flex flex-col  rounded-none  ">
+                <Link href={`/products/${p.slug}`}>
+                  {p.media?.[0] && (
                     <Image
                       src={p.media[0]}
                       alt={p.title}
                       width={265}
                       height={314}
-                      className="w-full object-cover border mb-[0.875rem]"
+                      className="w-full object-cover border-b mb-[1rem]"
                     />
-                  </Link>
-                )}
-                <div className="flex flex-col">
-                  <p className="mb-[0.75rem]">{p.category}</p>
-                  <div className="flex justify-between items-center mb-[0.875rem]">
-                    <Link href={`/products/${p.slug}`}>
-                      <h3>{p.title}</h3>
-                    </Link>
-                    <h3>${p.price}</h3>
-                  </div>
-                </div>
-              </div>
+                  )}
+                  <CardContent className="flex flex-col px-[1rem]">
+                    <p className="mb-[0.5rem] text-xs">{p.category}</p>
+                    <div className="flex flex-col justify-start items-start ">
+                      <h3 className="font-semibold mb-[0.5rem]">{p.title}</h3>
+
+                      <h3 className="text-sm">${p.price}</h3>
+                    </div>
+                  </CardContent>
+                </Link>
+              </Card>
             ))
           )}
         </div>

@@ -8,7 +8,6 @@ import { createOrder, OrderItem } from "@repo/shared/orders";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
-
 export default function CartDrawer({
   open,
   onClose,
@@ -66,7 +65,7 @@ export default function CartDrawer({
       }`}
       aria-hidden={!open}
     >
-      <div className="p-[2rem] border-b flex justify-between items-center">
+      <div className="p-8  flex justify-between items-center">
         <h3 className="text-lg font-semibold">Shopping Cart ({itemCount})</h3>
         <Button onClick={onClose} className="">
           Close
@@ -74,56 +73,66 @@ export default function CartDrawer({
       </div>
 
       <div
-        className="p-4 overflow-auto"
+        className="p-8 overflow-auto"
         style={{ maxHeight: "calc(100vh - 160px)" }}
       >
         {items.length === 0 ? (
           <div className="text-center opacity-60 py-8">Your cart is empty</div>
         ) : (
-          items.map((it) => (
-            <div key={it.product.id} className="flex customGap items-center mb-[2rem]">
-              {it.product.media?.[0] ? (
-          
-                <Image
-                  src={it.product.media[0]}
-                  alt={it.product.title}
-                  width={265}
-                  height={314}
-                  className=" object-cover rounded"
-                />
-              ) : (
-                <div className="w-16 h-16 bg-gray-100 rounded" />
-              )}
-              <div className="flex-1">
-                <div className="font-semibold">{it.product.title}</div>
-                <div className="text-sm opacity-60">
-                  ${it.product.price.toFixed(2)}
+          <div className="flex flex-col gap-4">
+            {items.map((it) => (
+              <div
+                key={it.product.id}
+                className="grid grid-cols-2 gap-4 border p-4 rounded items-start"
+              >
+                {/* Image */}
+                <div className="relative w-full h-40 col-span-1">
+                  {it.product.media?.[0] ? (
+                    <Image
+                      src={it.product.media[0]}
+                      alt={it.product.title}
+                      fill
+                      className="object-contain object-left rounded"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 rounded" />
+                  )}
                 </div>
-                <div className="mt-[1rem] flex items-center customGap">
-                  <Button
-                    onClick={() => updateQty(it.product.id, it.quantity - 1)}
-                    className=""
-                  >
-                    -
-                  </Button>
-                  <div className="px-[1rem]">{it.quantity}</div>
-                  <Button
-                    onClick={() => updateQty(it.product.id, it.quantity + 1)}
-                    className=""
-                  >
-                    +
-                  </Button>
 
-                  <Button
-                    onClick={() => removeItem(it.product.id)}
-                    className=""
-                  >
-                    Remove
-                  </Button>
+                {/* Details */}
+                <div className="flex flex-col justify-between col-span-1 col-start-2 h-full">
+                  <div>
+                    <div className="font-semibold">{it.product.title}</div>
+                    <div className="text-sm opacity-60">
+                      ${it.product.price.toFixed(2)}
+                    </div>
+                  </div>
+
+                  <div className="mt-2 flex flex-wrap items-center gap-y-[1rem]">
+                    <Button
+                      variant="secondary"
+                      onClick={() => updateQty(it.product.id, it.quantity - 1)}
+                    >
+                      -
+                    </Button>
+                    <div className="px-[1rem]">{it.quantity}</div>
+                    <Button
+                      variant="secondary"
+                      onClick={() => updateQty(it.product.id, it.quantity + 1)}
+                    >
+                      +
+                    </Button>
+                    <Button
+                      className="w-full"
+                      onClick={() => removeItem(it.product.id)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
       </div>
 
