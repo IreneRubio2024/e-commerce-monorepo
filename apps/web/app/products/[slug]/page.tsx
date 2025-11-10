@@ -4,7 +4,6 @@ import { use, useEffect, useState } from "react";
 import { fetchProduct, type Product } from "@repo/shared/products";
 import Navbar from "../../components/Navbar";
 import { useCart } from "../../components/cart/CartProvider";
-<<<<<<< Updated upstream
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +28,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         const data = await fetchProduct(slug);
         setProduct(data);
 
+        // Combine media + detailMedia for thumbnails
         const allImages = [...(data.media || []), ...(data.detailMedia || [])];
         setSelectedImage(allImages[0] || null);
       } catch (error) {
@@ -54,7 +54,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     <main className="bg-white min-h-screen">
       <Navbar open={open} setOpen={setOpen} />
 
-      <div className="grid grid-cols-12 customGap h-full px-0 pt-0 pb-8 lg:px-16 lg:pt-32">
+      <div className="grid grid-cols-12 customGap h-full px- pt-0 pb-8 lg:px-16 lg:pt-32">
         {/* ---------- LEFT SIDE: Image + Thumbnails ---------- */}
         <div className="col-span-12 lg:col-span-8 flex flex-col lg:flex-row-reverse items-start customGap relative h-full">
           {/* Main Image */}
@@ -76,7 +76,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               />
             )}
           </div>
-          <div className="flex px-8 lg:px-0 lg:flex-col gap-[1rem]">
+          <div className="flex px-8 lg:px-0 lg:flex-col gap-x-[1rem]">
             {/* Thumbnail list */}
             {product.media.concat(product.detailMedia).map((img, i) => (
               <div
