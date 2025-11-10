@@ -6,6 +6,9 @@ import { createOrder, OrderItem } from "@repo/shared/orders";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface ShippingInfo {
   name: string;
@@ -100,142 +103,166 @@ export default function CheckoutPage() {
   if (!order) {
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-        <button
-          className="px-4 py-2 bg-black text-white rounded"
-          onClick={handleCreateOrder}
-        >
+        <h1 className="text-2xl font-bold">Checkout</h1>
+        <Button className="" onClick={handleCreateOrder}>
           {loading ? "Creating Order..." : "Start Checkout"}
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 p-8">
-      {/* LEFT SIDE: Form + Payment */}
-      <div className="flex-1 space-y-8">
-        {/* Information */}
-        <section className="border p-4 rounded">
-          <h2 className="">Information</h2>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={shippingInfo.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={shippingInfo.email}
-            onChange={(e) => handleInputChange("email", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Address"
-            value={shippingInfo.address}
-            onChange={(e) => handleInputChange("address", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="City"
-            value={shippingInfo.city}
-            onChange={(e) => handleInputChange("city", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Postal Code"
-            value={shippingInfo.postalCode}
-            onChange={(e) => handleInputChange("postalCode", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Country"
-            value={shippingInfo.country}
-            onChange={(e) => handleInputChange("country", e.target.value)}
-            className="w-full mb-3 p-3   bg-gray-300"
-          />
-        </section>
-
-        {/* Shipping */}
-        <section className="border p-4 rounded">
-          <h2 className=" mb-4">Shipping</h2>
-          <p>Standard shipping: 5-7 business days</p>
-          <p>Free shipping for orders over $100</p>
-        </section>
-
-        {/* Payment */}
-        {!paid && (
-          <section className="border p-4 rounded">
-            <h2 className=" mb-4">Payment</h2>
-            <PayPalScriptProvider
-              options={{
-                "client-id":
-                  "AUa_2VKidyFS717-wJIqOs1gL9qhFS8KzM0oTGzSVZIp5cHzyC_tC8_Z1VOzPTBqZ8G9fw1Atq5CDetu",
-                currency: "USD",
-                intent: "capture",
-              }}
-            >
-              <PayPalButtons
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [
-                      { amount: { value: order.total.toFixed(2) } },
-                    ],
-                  });
-                }}
-                onApprove={(data, actions) => {
-                  return actions.order.capture().then(handleApprove);
-                }}
-              />
-            </PayPalScriptProvider>
+    <div className="flex flex-col items-start justify-start w-full">
+      <span className=" flex flex-col customGap px-8 mt-8 pb-8 lg:px-16 lg:pb-0  w-full">
+        <Link href="/">
+          <svg
+            width="49"
+            height="14"
+            viewBox="0 0 49 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M48.25 6.75H0.75M0.75 6.75L6.75 0.75M0.75 6.75L6.75 12.75"
+              stroke="black"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
+        <h1 className="text-2xl font-bold">Checkout</h1>
+      </span>
+      <div className="flex flex-col lg:flex-row customGap px-0 mt-0 pb-8 lg:px-16 lg:pt-16 w-full">
+        {/* LEFT SIDE: Form + Payment */}
+        <div className="flex-1 customGap">
+          {/* Information */}
+          <section className="flex flex-col border p-[2rem] rounded gap-[1rem]">
+            <h2 className="font-semibold">Information</h2>
+            <Input
+              type="text"
+              placeholder="Full Name"
+              value={shippingInfo.name}
+              onChange={(e) => handleInputChange("name", e.target.value)}
+              className="  bg-gray-300"
+            />
+            <Input
+              type="email"
+              placeholder="Email"
+              value={shippingInfo.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              className="  bg-gray-300"
+            />
+            <Input
+              type="text"
+              placeholder="Address"
+              value={shippingInfo.address}
+              onChange={(e) => handleInputChange("address", e.target.value)}
+              className="  bg-gray-300"
+            />
+            <Input
+              type="text"
+              placeholder="City"
+              value={shippingInfo.city}
+              onChange={(e) => handleInputChange("city", e.target.value)}
+              className="   bg-gray-300"
+            />
+            <Input
+              type="text"
+              placeholder="Postal Code"
+              value={shippingInfo.postalCode}
+              onChange={(e) => handleInputChange("postalCode", e.target.value)}
+              className="  bg-gray-300"
+            />
+            <Input
+              type="text"
+              placeholder="Country"
+              value={shippingInfo.country}
+              onChange={(e) => handleInputChange("country", e.target.value)}
+              className=" bg-gray-300"
+            />
           </section>
-        )}
 
-        {paid && (
-          <div className="p-4 border rounded text-green-600 font-semibold">
-            Payment Successful! Thank you for your order.
-          </div>
-        )}
-      </div>
+          {/* Shipping */}
+          <section className="border p-[2rem] ">
+            <h2
+              className=" 
+            font-semibold mb-[1rem]"
+            >
+              Shipping
+            </h2>
+            <p>Standard shipping: 5-7 business days</p>
+            <p>Free shipping for orders over $100</p>
+          </section>
 
-      {/* RIGHT SIDE: Cart */}
-      <div className="w-full lg:w-96 border p-4 rounded space-y-4">
-        <h2 className="">Your Cart</h2>
-        {items.length === 0 ? (
-          <p className=" opacity-60">Your cart is empty</p>
-        ) : (
-          items.map((it) => (
-            <div key={it.product.id} className="flex gap-3 items-center">
-              {it.product.media?.[0] ? (
-                <Image
-                  src={it.product.media[0]}
-                  alt={it.product.title}
-                  width={80}
-                  height={80}
-                  className="object-cover rounded"
+          {/* Payment */}
+          {!paid && (
+            <section className="flex flex-col border p-[2rem] gap-[1rem] rounded">
+              <h2 className=" font-semibold mb-[1rem]">Payment</h2>
+              <PayPalScriptProvider
+                options={{
+                  "client-id":
+                    "AUa_2VKidyFS717-wJIqOs1gL9qhFS8KzM0oTGzSVZIp5cHzyC_tC8_Z1VOzPTBqZ8G9fw1Atq5CDetu",
+                  currency: "USD",
+                  intent: "capture",
+                }}
+              >
+                <PayPalButtons
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      purchase_units: [
+                        { amount: { value: order.total.toFixed(2) } },
+                      ],
+                    });
+                  }}
+                  onApprove={(data, actions) => {
+                    return actions.order.capture().then(handleApprove);
+                  }}
                 />
-              ) : (
-                <div className="w-20 h-20 bg-gray-100 rounded" />
-              )}
-              <div className="flex-1">
-                <div className="font-semibold">{it.product.title}</div>
-                <div className="text-sm opacity-60">
-                  ${it.product.price.toFixed(2)}
-                </div>
-                <div className="text-sm opacity-60">Qty: {it.quantity}</div>
-              </div>
+              </PayPalScriptProvider>
+            </section>
+          )}
+
+          {paid && (
+            <div className="p-[2rem] border text-green-600 font-semibold">
+              Payment Successful! Thank you for your order.
             </div>
-          ))
-        )}
-        <div className="border-t pt-2 mt-2 flex justify-between font-semibold">
-          <span>Subtotal</span>
-          <span>${subtotal.toFixed(2)}</span>
+          )}
+        </div>
+
+        {/* RIGHT SIDE: Cart */}
+        <div className="w-full lg:w-96 border p-[2rem] rounded space-y-[1rem]">
+          <h2 className="font-semibold">Your Cart</h2>
+          {items.length === 0 ? (
+            <p className=" opacity-60">Your cart is empty</p>
+          ) : (
+            items.map((it) => (
+              <div key={it.product.id} className="flex gap-3 items-center">
+                {it.product.media?.[0] ? (
+                  <Image
+                    src={it.product.media[0]}
+                    alt={it.product.title}
+                    width={80}
+                    height={80}
+                    className="object-cover rounded"
+                  />
+                ) : (
+                  <div className="w-20 h-20 bg-gray-100 rounded" />
+                )}
+                <div className="flex-1">
+                  <div className="font-semibold">{it.product.title}</div>
+                  <div className="text-sm opacity-60">
+                    ${it.product.price.toFixed(2)}
+                  </div>
+                  <div className="text-sm opacity-60">Qty: {it.quantity}</div>
+                </div>
+              </div>
+            ))
+          )}
+          <div className="border-t pt-[1rem] mt-[1rem] flex justify-between font-semibold">
+            <span>Subtotal</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
         </div>
       </div>
     </div>
