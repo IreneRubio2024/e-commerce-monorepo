@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "./components/cart/CartProvider";
 import { Work_Sans, Source_Serif_4, VT323 } from "next/font/google";
+import GoogleAnalytics from "./components/GoogleAnalytics";
+import { GA_MEASUREMENT_ID } from "./lib/analytics";
 
 const workSans = Work_Sans({
   subsets: ["latin"],
@@ -32,6 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${workSans.variable} ${sourceSerif.variable} ${vt323.variable}`}>
+        {/* Google Analytics - only loads if GA_MEASUREMENT_ID is set */}
+        {GA_MEASUREMENT_ID && <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />}
+
         <CartProvider>
           {children}
         </CartProvider>

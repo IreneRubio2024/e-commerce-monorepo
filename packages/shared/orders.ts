@@ -59,6 +59,7 @@ export async function createOrder(order: Order): Promise<StrapiOrderResponse> {
   }
 
   return res.json();
+<<<<<<< Updated upstream
 }
 
 export async function updateOrderStatus(
@@ -78,3 +79,6 @@ export async function updateOrderStatus(
 
   return res.json();
 }
+=======
+}
+>>>>>>> Stashed changes
