@@ -83,7 +83,7 @@ export default function CartScreen({ navigation, route }: any) {
 
       const newOrder = await createOrder({
         items: orderItems,
-        total, 
+        total,
         orderStatus: "pending",
       });
 
@@ -160,7 +160,6 @@ export default function CartScreen({ navigation, route }: any) {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Shipping</Text>
         <Text>Standard shipping: 5–7 business days</Text>
-        <Text>Free shipping for orders over $100</Text>
       </View>
 
       {/* Payment */}
