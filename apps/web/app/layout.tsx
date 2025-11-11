@@ -5,6 +5,8 @@ import { Work_Sans, Source_Serif_4, VT323 } from "next/font/google";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { GA_MEASUREMENT_ID } from "./lib/analytics";
 
+
+
 const workSans = Work_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -38,7 +40,10 @@ export default function RootLayout({
         {GA_MEASUREMENT_ID && <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />}
 
         <CartProvider>
-          {children}
+
+        {children}
+ 
+
         </CartProvider>
       </body>
     </html>

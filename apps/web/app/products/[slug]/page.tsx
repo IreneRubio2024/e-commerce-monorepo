@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -57,7 +58,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     <main className="bg-white min-h-screen">
       <Navbar open={open} setOpen={setOpen} />
 
-      <div className="grid grid-cols-12 customGap h-full px- pt-0 pb-8 lg:px-16 lg:pt-32">
+      <div className="grid grid-cols-12 customGap h-full px-0 pt-0 pb-8 lg:px-16 lg:pt-32">
         {/* ---------- LEFT SIDE: Image + Thumbnails ---------- */}
         <div className="col-span-12 lg:col-span-8 flex flex-col lg:flex-row-reverse items-start customGap relative h-full">
           {/* Main Image */}
@@ -79,7 +80,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               />
             )}
           </div>
-          <div className="flex px-8 lg:px-0 lg:flex-col gap-x-[1rem]">
+          <div className="flex px-8 lg:px-0 lg:flex-col gap-[1rem]">
             {/* Thumbnail list */}
             {product.media.concat(product.detailMedia).map((img, i) => (
               <div
@@ -137,6 +138,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </Card>
         </div>
       </div>
+     
     </main>
   );
 }

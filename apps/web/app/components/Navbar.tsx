@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useCart } from "./cart/CartProvider";
 import CartDrawer from "./cart/CartDrawer";
 import { usePathname } from "next/navigation";
-import { LucideLink2 } from "lucide-react";
+import { motion } from "framer-motion";
+
 
 interface Props {
   open: boolean;
@@ -18,7 +19,12 @@ export default function Navbar({ open, setOpen }: Props) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-screen z-20">
+
+    <motion.header
+    initial="hidden"
+    animate="show"
+             transition={{ delay: 0.2, ease: "easeInOut", duration: 0.6 }}
+             className="fixed top-0 left-0 w-screen z-20">
         <div className="grid grid-cols-3 w-full px-8  lg:px-16 mt-8">
           <div className="col-span-1 flex justify-start items-center customGap">
             {!isSlugPage ? (
@@ -89,19 +95,33 @@ export default function Navbar({ open, setOpen }: Props) {
             )}
 
             {/* NAVBAR LINKS (DESKTOP) */}
-            <nav className="hidden lg:flex w-full ">
-              <ul className="flex justify-start items-center text-sm font-semibold customGap w-full">
-                <li>
-                  <Link href="/">Home</Link>
-                </li>
-                <li>
-                  <Link href="/">Collections</Link>
-                </li>
-                <li>
-                  <Link href="/">New</Link>
-                </li>
-              </ul>
-            </nav>
+            <motion.nav
+        className="hidden lg:flex w-full"
+        variants={{
+          show: { transition: { staggerChildren: 0.1 } },
+          hidden: {},
+        }}
+      >
+        <motion.ul className="flex justify-start items-center text-sm font-semibold customGap w-full">
+          {["Home", "Collections", "New"].map((link, idx) => (
+            <motion.li
+              key={link}
+              variants={{
+                hidden: { opacity: 0, y: -20 },
+                show: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <Link
+                href="/"
+                className={link !== "Home" ? "opacity-30" : ""}
+              >
+                {link}
+              </Link>
+            </motion.li>
+          ))}
+        </motion.ul>
+      </motion.nav>
           </div>
 
           {/* LOGO */}
@@ -138,7 +158,7 @@ export default function Navbar({ open, setOpen }: Props) {
 
               {/* Profile icon (unchanged) */}
               <li>
-                <Link href="/">
+                <Link className="opacity-30" href="/">
                   <svg
                     width="41"
                     height="41"
@@ -195,7 +215,7 @@ export default function Navbar({ open, setOpen }: Props) {
             </ul>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* 🧺 CART DRAWER */}
       <CartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
