@@ -1,6 +1,5 @@
-// app/_layout.tsx
 import { Stack } from "expo-router";
-import { CartProvider } from "./context/cartProvider-mobile";
+import { CartProvider } from "./context/cart-Context-mobile"; // adjust path
 
 export default function RootLayout() {
   return (

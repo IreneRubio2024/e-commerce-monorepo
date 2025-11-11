@@ -3777,10 +3777,33 @@
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
 
+"@react-navigation/core@^7.13.0":
+  version "7.13.0"
+  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-7.13.0.tgz#71577637cc32626e208fa994fc13e77394b17932"
+  integrity sha512-Fc/SO23HnlGnkou/z8JQUzwEMvhxuUhr4rdPTIZp/c8q1atq3k632Nfh8fEiGtk+MP1wtIvXdN2a5hBIWpLq3g==
+  dependencies:
+    "@react-navigation/routers" "^7.5.1"
+    escape-string-regexp "^4.0.0"
+    fast-deep-equal "^3.1.3"
+    nanoid "^3.3.11"
+    query-string "^7.1.3"
+    react-is "^19.1.0"
+    use-latest-callback "^0.2.4"
+    use-sync-external-store "^1.5.0"
+
 "@react-navigation/elements@^2.6.3", "@react-navigation/elements@^2.7.0":
   version "2.7.0"
   resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-2.7.0.tgz#1d340b8815f9cea48cd48a9a0f079662fb0db943"
   integrity sha512-lqlUUTqzKJrm3WYmiy901DSpa5wW8DWSmqNqWlRFWDVjx6SSjOUThQpdMnVXhydPtrTo74yVUPB27oe/jrvo4Q==
+  dependencies:
+    color "^4.2.3"
+    use-latest-callback "^0.2.4"
+    use-sync-external-store "^1.5.0"
+
+"@react-navigation/elements@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.8.1.tgz#4df96e0219a2ed0be20d5452297835e632aaa6f9"
+  integrity sha512-MLmuS5kPAeAFFOylw89WGjgEFBqGj/KBK6ZrFrAOqLnTqEzk52/SO1olb5GB00k6ZUCDZKJOp1BrLXslxE6TgQ==
   dependencies:
     color "^4.2.3"
     use-latest-callback "^0.2.4"
@@ -3795,6 +3818,27 @@
     color "^4.2.3"
     sf-symbols-typescript "^2.1.0"
     warn-once "^0.1.1"
+
+"@react-navigation/native-stack@^7.6.2":
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native-stack/-/native-stack-7.6.2.tgz#884efb57d4d8b9be4d743deb71e6ae223b610460"
+  integrity sha512-CB6chGNLwJYiyOeyCNUKx33yT7XJSwRZIeKHf4S1vs+Oqu3u9zMnvGUIsesNgbgX0xy16gBqYsrWgr0ZczBTtA==
+  dependencies:
+    "@react-navigation/elements" "^2.8.1"
+    color "^4.2.3"
+    sf-symbols-typescript "^2.1.0"
+    warn-once "^0.1.1"
+
+"@react-navigation/native@^7.1.19":
+  version "7.1.19"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-7.1.19.tgz#f147e412a9f4a5c5eed85b4bde25171d0ce0297b"
+  integrity sha512-fM7q8di4Q8sp2WUhiUWOe7bEDRyRhbzsKQOd5N2k+lHeCx3UncsRYuw4Q/KN0EovM3wWKqMMmhy/YWuEO04kgw==
+  dependencies:
+    "@react-navigation/core" "^7.13.0"
+    escape-string-regexp "^4.0.0"
+    fast-deep-equal "^3.1.3"
+    nanoid "^3.3.11"
+    use-latest-callback "^0.2.4"
 
 "@react-navigation/native@^7.1.8":
   version "7.1.18"
@@ -8797,10 +8841,10 @@ expo-modules-core@3.0.22:
   dependencies:
     invariant "^2.2.4"
 
-expo-router@~6.0.13:
-  version "6.0.13"
-  resolved "https://registry.npmjs.org/expo-router/-/expo-router-6.0.13.tgz#493d33cd44ac24b91cbc6ff640e853598803ec04"
-  integrity sha512-ngvdEah2+/Xf3/2SSrEuaW9qawUYlkh3NEpw0ZSsjUjgliKTI2rtw1H+dNnIsZEcvnGe/b8UvQHai60KnhAnJw==
+expo-router@^6.0.14:
+  version "6.0.14"
+  resolved "https://registry.yarnpkg.com/expo-router/-/expo-router-6.0.14.tgz#92a125a8a051186aac59f60040a03c6f8353d21b"
+  integrity sha512-vizLO4SgnMEL+PPs2dXr+etEOuksjue7yUQBCtfCEdqoDkQlB0r35zI7rS34Wt53sxKWSlM2p+038qQEpxtiFw==
   dependencies:
     "@expo/metro-runtime" "^6.1.2"
     "@expo/schema-utils" "^0.1.7"
@@ -8812,7 +8856,7 @@ expo-router@~6.0.13:
     client-only "^0.0.1"
     debug "^4.3.4"
     escape-string-regexp "^4.0.0"
-    expo-server "^1.0.2"
+    expo-server "^1.0.3"
     fast-deep-equal "^3.1.3"
     invariant "^2.2.4"
     nanoid "^3.3.8"
@@ -8830,6 +8874,11 @@ expo-server@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/expo-server/-/expo-server-1.0.2.tgz#673280d5528a77938374f35fc2a16bf5a917f328"
   integrity sha512-QlQLjFuwgCiBc+Qq0IyBBHiZK1RS0NJSsKVB5iECMJrR04q7PhkaF7dON0fhvo00COy4fT9rJ5brrJDpFro/gA==
+
+expo-server@^1.0.3:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/expo-server/-/expo-server-1.0.4.tgz#cb90f23272257f8cb0c9dceaade26bb169d8a3f7"
+  integrity sha512-IN06r3oPxFh3plSXdvBL7dx0x6k+0/g0bgxJlNISs6qL5Z+gyPuWS750dpTzOeu37KyBG0RcyO9cXUKzjYgd4A==
 
 expo-splash-screen@~31.0.10:
   version "31.0.10"
@@ -14288,13 +14337,12 @@ react-native-safe-area-context@^5.6.2:
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.6.2.tgz#283e006f5b434fb247fcb4be0971ad7473d5c560"
   integrity sha512-4XGqMNj5qjUTYywJqpdWZ9IG8jgkS3h06sfVjfw5yZQZfWnRFXczi0GnYyFyCc2EBps/qFmoCH8fez//WumdVg==
 
-react-native-screens@~4.16.0:
-  version "4.16.0"
-  resolved "https://registry.npmjs.org/react-native-screens/-/react-native-screens-4.16.0.tgz#efa42e77a092aa0b5277c9ae41391ea0240e0870"
-  integrity sha512-yIAyh7F/9uWkOzCi1/2FqvNvK6Wb9Y1+Kzn16SuGfN9YFJDTbwlzGRvePCNTOX0recpLQF3kc2FmvMUhyTCH1Q==
+react-native-screens@^4.18.0:
+  version "4.18.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-4.18.0.tgz#ba5a951b3f145e3b773d201143c19e1b1c1337ff"
+  integrity sha512-mRTLWL7Uc1p/RFNveEIIrhP22oxHduC2ZnLr/2iHwBeYpGXR0rJZ7Bgc0ktxQSHRjWTPT70qc/7yd4r9960PBQ==
   dependencies:
     react-freeze "^1.0.0"
-    react-native-is-edge-to-edge "^1.2.1"
     warn-once "^0.1.0"
 
 react-native-web@~0.21.0:
