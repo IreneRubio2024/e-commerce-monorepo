@@ -83,7 +83,7 @@ export default function CartScreen({ navigation, route }: any) {
 
       const newOrder = await createOrder({
         items: orderItems,
-        total, // ✅ correct property name
+        total, 
         orderStatus: "pending",
       });
 
