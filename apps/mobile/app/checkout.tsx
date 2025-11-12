@@ -34,7 +34,9 @@ export default function Checkout({ route }: any) {
     postalCode: "",
     country: "",
   });
-  const [order, setOrder] = useState<{ id: number; total: number } | null>(null);
+  const [order, setOrder] = useState<{ id: number; total: number } | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [paid, setPaid] = useState(false);
   const [showPayPal, setShowPayPal] = useState(false);
@@ -114,7 +116,7 @@ export default function Checkout({ route }: any) {
             orderStatus: "paid",
             paypalOrderId: details.orderID,
             paypalPayerId: details.payerID,
-          }
+          },
         }),
       });
       setPaid(true);
@@ -130,7 +132,10 @@ export default function Checkout({ route }: any) {
   };
   const handlePayPalError = (error: any) => {
     console.error("PayPal error:", error);
-    Alert.alert("Payment Error", "Something went wrong with PayPal. Please try again.");
+    Alert.alert(
+      "Payment Error",
+      "Something went wrong with PayPal. Please try again."
+    );
   };
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
@@ -194,7 +199,9 @@ export default function Checkout({ route }: any) {
                         disabled={loading}
                       >
                         <Text style={styles.checkoutText}>
-                          {loading ? "Creating Order..." : "Continue to Payment"}
+                          {loading
+                            ? "Creating Order..."
+                            : "Continue to Payment"}
                         </Text>
                       </TouchableOpacity>
                     )}
@@ -203,6 +210,7 @@ export default function Checkout({ route }: any) {
                         <Text style={styles.orderIdText}>
                           Order #{order.id} - ${order.total.toFixed(2)}
                         </Text>
+
                         <PayPalButton
                           amount={order.total.toFixed(2)}
                           orderId={order.id}
@@ -347,4 +355,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-

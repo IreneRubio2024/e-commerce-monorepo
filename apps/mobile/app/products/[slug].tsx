@@ -24,9 +24,16 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [added, setAdded] = useState(false);
+  const { items, addItem } = useCart();
+  function checkCart() {
+    return items.some((item) => item.product.id === product?.id);
+  }
 
-  const { addItem } = useCart();
+  const [added, setAdded] = useState<boolean>(checkCart());
+
+  useEffect(() => {
+    setAdded(checkCart());
+  }, [items, product]);
 
   useEffect(() => {
     if (!slug) return;
@@ -49,7 +56,6 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (!product) return;
     addItem(product, 1);
-    setAdded(true);
 
     setTimeout(() => setAdded(false), 1200);
   };
@@ -113,7 +119,10 @@ export default function ProductDetailPage() {
 
         <TouchableOpacity
           style={[styles.addButton, added && styles.addedButton]}
-          onPress={handleAddToCart}
+          onPress={() => {
+            handleAddToCart();
+            checkCart();
+          }}
           disabled={added}
         >
           <Text style={styles.addButtonText}>

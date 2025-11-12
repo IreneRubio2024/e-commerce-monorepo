@@ -12,18 +12,9 @@ import { useEffect, useState } from "react";
 import { useCart } from "./context/cart-Context-mobile";
 
 export default function Cart() {
-  const { items } = useCart();
+  const { items, updateQty, removeItem, subtotal } = useCart();
+
   console.log("in Cart", items);
-
-  const [subtotal, setSubtotal] = useState(0);
-
-  useEffect(() => {
-    const subtotal = items.reduce((total, item) => {
-      return total + item.product.price * item.quantity;
-    }, 0);
-
-    setSubtotal(subtotal);
-  }, []);
 
   return (
     <SafeAreaProvider>
@@ -67,17 +58,36 @@ export default function Cart() {
 
                 <View style={{ rowGap: 16 }}>
                   <View style={styles.productAmountContainer}>
-                    <TouchableOpacity style={styles.addAndRemove}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        updateQty(
+                          items.item.product.id,
+                          items.item.quantity - 1
+                        )
+                      }
+                      style={styles.addAndRemove}
+                    >
                       <Text>-</Text>
                     </TouchableOpacity>
                     <Text style={{ paddingVertical: 8, paddingHorizontal: 16 }}>
                       {items.item.quantity}
                     </Text>
-                    <TouchableOpacity style={styles.addAndRemove}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        updateQty(
+                          items.item.product.id,
+                          items.item.quantity + 1
+                        )
+                      }
+                      style={styles.addAndRemove}
+                    >
                       <Text>+</Text>
                     </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.removeButton}>
+                  <TouchableOpacity
+                    onPress={() => removeItem(items.item.product.id)}
+                    style={styles.removeButton}
+                  >
                     <Text style={{ color: "#ffffff", fontWeight: 600 }}>
                       Remove
                     </Text>
