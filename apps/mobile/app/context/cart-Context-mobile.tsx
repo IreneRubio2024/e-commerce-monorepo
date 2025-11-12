@@ -68,7 +68,11 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+export default function CartProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
 
   useEffect(() => {
@@ -86,7 +90,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     loadCart();
   }, []);
 
-
   useEffect(() => {
     const saveCart = async () => {
       try {
@@ -103,15 +106,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       {children}
     </CartContext.Provider>
   );
-};
-
+}
 
 export const useCartContext = () => {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error("useCartContext must be used within CartProvider");
   return ctx;
 };
-
 
 export const useCart = () => {
   const { state, dispatch } = useCartContext();

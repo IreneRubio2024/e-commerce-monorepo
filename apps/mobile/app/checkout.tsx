@@ -13,6 +13,7 @@ import { useCart } from "./context/cart-Context-mobile";
 import { createOrder, OrderItem } from "@repo/shared/orders";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
+import { WebView } from "react-native-webview";
 interface ShippingInfo {
   name: string;
   email: string;
@@ -21,6 +22,7 @@ interface ShippingInfo {
   postalCode: string;
   country: string;
 }
+
 export default function Checkout({ route }: any) {
   const { items, clearCart } = useCart();
   const orderIdParam = route?.params?.orderId;
