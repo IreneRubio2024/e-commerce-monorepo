@@ -13,6 +13,7 @@ import { useCart } from "./context/cart-Context-mobile";
 import { createOrder, OrderItem } from "@repo/shared/orders";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
+import PayPalButton from "./PayPalButton";
 interface ShippingInfo {
   name: string;
   email: string;
@@ -32,11 +33,10 @@ export default function Checkout({ route }: any) {
     postalCode: "",
     country: "",
   });
-  const [order, setOrder] = useState<{ id: number; total: number } | null>(
-    null
-  );
+  const [order, setOrder] = useState<{ id: number; total: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [showPayPal, setShowPayPal] = useState(false);
   const subtotal = items.reduce(
     (sum: number, it: { product: { price: number }; quantity: number }) =>
       sum + it.product.price * it.quantity,
@@ -56,7 +56,24 @@ export default function Checkout({ route }: any) {
     setShippingInfo({ ...shippingInfo, [field]: value });
   };
   const handleCreateOrder = async () => {
-    if (!items.length) return;
+    if (!items.length) {
+      Alert.alert("Error", "Your cart is empty");
+      return;
+    }
+    // Validera att alla fält är ifyllda
+    const requiredFields: (keyof ShippingInfo)[] = [
+      "name",
+      "email",
+      "address",
+      "city",
+      "postalCode",
+      "country",
+    ];
+    const emptyFields = requiredFields.filter((field) => !shippingInfo[field]);
+    if (emptyFields.length > 0) {
+      Alert.alert("Error", "Please fill in all shipping information");
+      return;
+    }
     setLoading(true);
     try {
       const orderItems: OrderItem[] = items.map(
@@ -77,7 +94,7 @@ export default function Checkout({ route }: any) {
         orderStatus: "pending",
       });
       setOrder({ id: newOrder.data.id, total });
-      Alert.alert("Order Created", `Order #${newOrder.data.id} created!`);
+      setShowPayPal(true);
     } catch (err) {
       console.error(err);
       Alert.alert("Error", "Could not create order.");
@@ -85,20 +102,34 @@ export default function Checkout({ route }: any) {
       setLoading(false);
     }
   };
-  const handleApprove = async () => {
+  const handlePayPalSuccess = async (details: any) => {
     if (!order) return;
-    Alert.alert("Payment Successful", "Your order has been paid.");
     try {
       await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/orders/${order.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: { orderStatus: "paid" } }),
+        body: JSON.stringify({
+          data: {
+            orderStatus: "paid",
+            paypalOrderId: details.orderID,
+            paypalPayerId: details.payerID,
+          }
+        }),
       });
       setPaid(true);
+      Alert.alert(
+        "Payment Successful",
+        `Thank you! Your order #${order.id} has been paid.`
+      );
       clearCart();
     } catch (err) {
       console.error(err);
+      Alert.alert("Error", "Payment succeeded but order update failed");
     }
+  };
+  const handlePayPalError = (error: any) => {
+    console.error("PayPal error:", error);
+    Alert.alert("Payment Error", "Something went wrong with PayPal. Please try again.");
   };
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
@@ -110,7 +141,7 @@ export default function Checkout({ route }: any) {
             style={{ flex: 1 }}
             contentContainerStyle={{
               padding: 20,
-              paddingBottom: 60, // space for bottom content
+              paddingBottom: 60,
             }}
             ListHeaderComponent={
               <>
@@ -142,6 +173,7 @@ export default function Checkout({ route }: any) {
                         handleInputChange(field as keyof ShippingInfo, value)
                       }
                       style={styles.input}
+                      editable={!paid}
                     />
                   ))}
                 </View>
@@ -154,17 +186,40 @@ export default function Checkout({ route }: any) {
                 {!paid ? (
                   <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Payment</Text>
-                    <TouchableOpacity
-                      onPress={handleApprove}
-                      style={styles.payButton}
-                    >
-                      <Text style={styles.payText}>Pay with PayPal</Text>
-                    </TouchableOpacity>
+                    {!order && !showPayPal && (
+                      <TouchableOpacity
+                        onPress={handleCreateOrder}
+                        style={styles.checkoutButton}
+                        disabled={loading}
+                      >
+                        <Text style={styles.checkoutText}>
+                          {loading ? "Creating Order..." : "Continue to Payment"}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                    {order && showPayPal && (
+                      <>
+                        <Text style={styles.orderIdText}>
+                          Order #{order.id} - ${order.total.toFixed(2)}
+                        </Text>
+                        <PayPalButton
+                          amount={order.total.toFixed(2)}
+                          orderId={order.id}
+                          onSuccess={handlePayPalSuccess}
+                          onError={handlePayPalError}
+                        />
+                      </>
+                    )}
                   </View>
                 ) : (
-                  <Text style={styles.successText}>
-                    Payment Successful! Thank you for your order.
-                  </Text>
+                  <View style={styles.successContainer}>
+                    <Text style={styles.successText}>
+                      ✓ Payment Successful!
+                    </Text>
+                    <Text style={styles.successSubtext}>
+                      Thank you for your order #{order?.id}
+                    </Text>
+                  </View>
                 )}
                 {/* Cart summary header */}
                 <View style={styles.section}>
@@ -204,6 +259,7 @@ export default function Checkout({ route }: any) {
   );
 }
 const styles = StyleSheet.create({
+  // ... behåll alla dina befintliga styles ...
   container: {
     flexGrow: 1,
     padding: 20,
@@ -232,17 +288,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 21,
     backgroundColor: "#000000",
     color: "#FFFFFF",
-    fontWeight: 600,
+    fontWeight: "600" as any,
   },
   closeButtonText: {
     color: "#fff",
     fontWeight: "600",
     fontSize: 16,
   },
-  // title: {
-  //   fontSize: 24,
-  //   fontWeight: "bold",
-  // },
   checkoutButton: {
     backgroundColor: "black",
     padding: 14,
@@ -250,13 +302,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkoutText: { color: "white", fontWeight: "bold" },
-  payButton: {
-    backgroundColor: "#0070BA",
-    padding: 14,
-    borderRadius: 8,
-    alignItems: "center",
+  orderIdText: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 12,
+    color: "#333",
   },
-  payText: { color: "white", fontWeight: "bold" },
   cartItem: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   image: { width: 60, height: 60, borderRadius: 6, marginRight: 10 },
   imagePlaceholder: {
@@ -278,11 +329,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   subtotalText: { fontWeight: "600" },
-  emptyText: { color: "#888" },
+  successContainer: {
+    backgroundColor: "#E8F5E9",
+    padding: 20,
+    borderRadius: 8,
+    alignItems: "center",
+  },
   successText: {
-    color: "green",
-    fontWeight: "600",
-    marginVertical: 10,
-    textAlign: "center",
+    color: "#2E7D32",
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  successSubtext: {
+    color: "#2E7D32",
+    fontSize: 14,
   },
 });
+
