@@ -22,6 +22,7 @@ interface ShippingInfo {
   postalCode: string;
   country: string;
 }
+
 export default function Checkout({ route }: any) {
   const { items, clearCart } = useCart();
   const orderIdParam = route?.params?.orderId;

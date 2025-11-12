@@ -50,7 +50,7 @@ export default function ProductDetailPage() {
     if (!product) return;
     addItem(product, 1);
     setAdded(true);
-    Alert.alert("Added to cart!", `${product.title} has been added.`);
+
     setTimeout(() => setAdded(false), 1200);
   };
 

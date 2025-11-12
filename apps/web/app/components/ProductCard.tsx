@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { trackProductView, trackAddToCart } from '@/lib/analytics';
+import { trackProductView, trackAddToCart } from '../lib/analytics';
 
 interface Product {
   id: string;
