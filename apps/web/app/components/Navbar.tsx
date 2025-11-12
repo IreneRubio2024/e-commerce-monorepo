@@ -6,7 +6,6 @@ import CartDrawer from "./cart/CartDrawer";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
-
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -19,12 +18,12 @@ export default function Navbar({ open, setOpen }: Props) {
 
   return (
     <>
-
-    <motion.header
-    initial="hidden"
-    animate="show"
-             transition={{ delay: 0.2, ease: "easeInOut", duration: 0.6 }}
-             className="fixed top-0 left-0 w-screen z-20">
+      <motion.header
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+        className="fixed top-0 left-0 w-screen z-20"
+      >
         <div className="grid grid-cols-3 w-full px-8  lg:px-16 mt-8">
           <div className="col-span-1 flex justify-start items-center customGap">
             {!isSlugPage ? (
@@ -96,32 +95,32 @@ export default function Navbar({ open, setOpen }: Props) {
 
             {/* NAVBAR LINKS (DESKTOP) */}
             <motion.nav
-        className="hidden lg:flex w-full"
-        variants={{
-          show: { transition: { staggerChildren: 0.1 } },
-          hidden: {},
-        }}
-      >
-        <motion.ul className="flex justify-start items-center text-sm font-semibold customGap w-full">
-          {["Home", "Collections", "New"].map((link, idx) => (
-            <motion.li
-              key={link}
+              className="hidden lg:flex w-full"
               variants={{
-                hidden: { opacity: 0, y: -20 },
-                show: { opacity: 1, y: 0 },
+                show: { transition: { staggerChildren: 0.1 } },
+                hidden: {},
               }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              <Link
-                href="/"
-                className={link !== "Home" ? "opacity-30" : ""}
-              >
-                {link}
-              </Link>
-            </motion.li>
-          ))}
-        </motion.ul>
-      </motion.nav>
+              <motion.ul className="flex justify-start items-center text-sm font-semibold customGap w-full">
+                {["Home", "Collections", "New"].map((link, idx) => (
+                  <motion.li
+                    key={link}
+                    variants={{
+                      hidden: { opacity: 0, y: -20 },
+                      show: { opacity: 1, y: 0 },
+                    }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  >
+                    <Link
+                      href="/"
+                      className={link !== "Home" ? "opacity-30" : ""}
+                    >
+                      {link}
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.nav>
           </div>
 
           {/* LOGO */}

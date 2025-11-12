@@ -1,7 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { fetchProducts, type Product } from "@repo/shared/products";
 import Navbar from "./components/Navbar";
 import Link from "next/link";
@@ -11,16 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import MainWrapper from "./components/MainWrapper";
 import MobileProductPageLayout from "./components/MobileProductPageLayout";
-import SkeletonGrid from "./components/SkeletonGrid";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-
-
-const ProductGrid = dynamic(() => import("./components/ProductGrid"), {
-  ssr: false,
-});
-
-
-
+import Image from "next/image";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,8 +24,6 @@ export default function Home() {
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const [loading, setLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
-
-
 
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
@@ -81,108 +71,146 @@ export default function Home() {
   });
 
   return (
-    <main
-      className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       <Navbar open={open} setOpen={setOpen} />
       {showContent && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{delay: 0.2, duration: 0.6, ease: "easeOut" }}
+          transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
         >
-      {isMobile ? (
-        <MobileProductPageLayout
-          open={open}
-          setOpen={setOpen}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          filteredProducts={filteredProducts}
-          onlyInStock={onlyInStock}
-          setOnlyInStock={setOnlyInStock}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-      ) : (
-        <MainWrapper>
-          <aside className="col-span-4">
-            <div className="sticky top-32 flex flex-col bg-white p-8 border customGap">
-              <h2 className="text-lg font-semibold">Filters</h2>
-              <div className="flex flex-col customGap">
-                <div className="flex flex-col border-b border-dotted border-gray-300 pb-4">
-                  <h3 className="text-base font-medium mb-[1rem]">
-                    Availability
-                  </h3>
-                  <Label
-                    htmlFor="inStock"
-                    className="flex items-center gap-[1rem] cursor-pointer select-none"
-                  >
-                    <Checkbox
-                      id="inStock"
-                      checked={onlyInStock}
-                      onCheckedChange={(checked) => setOnlyInStock(!!checked)}
-                    />
-                    <span>Show only in stock</span>
-                  </Label>
+          {isMobile ? (
+            <MobileProductPageLayout
+              open={open}
+              setOpen={setOpen}
+              categories={categories}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              filteredProducts={filteredProducts}
+              onlyInStock={onlyInStock}
+              setOnlyInStock={setOnlyInStock}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          ) : (
+            <MainWrapper>
+              <aside className="col-span-4">
+                <div className="sticky top-32 flex flex-col bg-white p-8 border customGap">
+                  <h2 className="text-lg font-semibold">Filters</h2>
+                  <div className="flex flex-col customGap">
+                    <div className="flex flex-col border-b border-dotted border-gray-300 pb-4">
+                      <h3 className="text-base font-medium mb-[1rem]">
+                        Availability
+                      </h3>
+                      <Label
+                        htmlFor="inStock"
+                        className="flex items-center gap-[1rem] cursor-pointer select-none"
+                      >
+                        <Checkbox
+                          id="inStock"
+                          checked={onlyInStock}
+                          onCheckedChange={(checked) =>
+                            setOnlyInStock(!!checked)
+                          }
+                        />
+                        <span>Show only in stock</span>
+                      </Label>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </aside>
+              </aside>
 
-          <section className="col-start-5 col-span-8 flex flex-col customGap">
-            <div className="flex flex-col">
-              <span className="flex opacity-60 text-sm gap-[0.5rem] font-semibold mb-[0.5rem]">
-                <Link href="/">Home</Link> /{" "}
-                <Link href="/" className="opacity-30">
-                  Products
-                </Link>
-              </span>
-              <h1 className="text-3xl font-extrabold tracking-wide uppercase">
-                Products
-              </h1>
-            </div>
+              <section className="col-start-5 col-span-8 flex flex-col customGap">
+                <div className="flex flex-col">
+                  <span className="flex opacity-60 text-sm gap-[0.5rem] font-semibold mb-[0.5rem]">
+                    <Link href="/">Home</Link> /{" "}
+                    <Link href="/" className="opacity-30">
+                      Products
+                    </Link>
+                  </span>
+                  <h1 className="text-3xl font-extrabold tracking-wide uppercase">
+                    Products
+                  </h1>
+                </div>
 
-            <div className="flex flex-row w-full customGap">
-              <div className="relative w-1/2">
-                <Input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pr-8"
-                />
-              </div>
+                <div className="flex flex-row w-full customGap">
+                  <div className="relative w-1/2">
+                    <Input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pr-8"
+                    />
+                  </div>
 
-              <div className="flex uppercase gap-x-[1rem] gap-y-[0.5rem]">
-                <Button
-                  onClick={() => setSelectedCategory(null)}
-                  variant={selectedCategory === null ? "default" : "secondary"}
-                >
-                  All
-                </Button>
-                {categories.map((cat) => (
-                  <Button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    variant={selectedCategory === cat ? "default" : "secondary"}
-                  >
-                    {cat}
-                  </Button>
-                ))}
-              </div>
-            </div>
+                  <div className="flex uppercase gap-x-[1rem] gap-y-[0.5rem]">
+                    <Button
+                      onClick={() => setSelectedCategory(null)}
+                      variant={
+                        selectedCategory === null ? "default" : "secondary"
+                      }
+                    >
+                      All
+                    </Button>
+                    {categories.map((cat) => (
+                      <Button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        variant={
+                          selectedCategory === cat ? "default" : "secondary"
+                        }
+                      >
+                        {cat}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
 
-            {loading ? (
-              <SkeletonGrid />
-            ) : (
-              <Suspense fallback={<SkeletonGrid />}>
-                <ProductGrid filteredProducts={filteredProducts} />
-              </Suspense>
-            )}
-          </section>
-        </MainWrapper>
-      )}
-      </motion.div>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-[1rem] w-full">
+                  {filteredProducts.length === 0 ? (
+                    <div className="opacity-60 text-center col-span-full">
+                      No products found
+                    </div>
+                  ) : (
+                    filteredProducts.map((p, i) => (
+                      <div key={i} className="w-full">
+                        <Card className="rounded-none border-none">
+                          {p.media?.[0] && (
+                            <Link href={`/products/${p.slug}`}>
+                              <Image
+                                src={p.media[0]}
+                                alt={p.title}
+                                width={265}
+                                height={314}
+                                className="w-full object-cover border"
+                              />
+                            </Link>
+                          )}
+                          <CardContent className="p-4 flex flex-col gap-2">
+                            <p className="text-sm text-gray-500">
+                              {p.category}
+                            </p>
+                            <div className="flex justify-between items-center">
+                              <Link href={`/products/${p.slug}`}>
+                                <CardTitle className="text-base font-medium hover:underline">
+                                  {p.title}
+                                </CardTitle>
+                              </Link>
+                              <span className="text-base font-semibold">
+                                ${p.price}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </section>
+            </MainWrapper>
+          )}
+        </motion.div>
       )}
     </main>
   );

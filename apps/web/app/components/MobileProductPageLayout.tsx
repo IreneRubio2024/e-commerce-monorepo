@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import ProductGrid from "./ProductGrid";
-
-
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
 
 type MobileProps = {
   open: boolean;
@@ -19,7 +19,6 @@ type MobileProps = {
   setOnlyInStock: (value: boolean) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-
 };
 
 export default function MobileProductPageLayout({
@@ -33,19 +32,13 @@ export default function MobileProductPageLayout({
   setOnlyInStock,
   searchQuery,
   setSearchQuery,
-
 }: MobileProps) {
   return (
     <div className="flex flex-col col-span-12  min-h-screen">
-
-
       <div className="flex flex-col col-span-12 px-8 min-h-screen">
- 
         <div className="flex flex-col items-center mt-32 text-3xl font-extrabold tracking-wide">
           <h1 className="uppercase mb-8">Products</h1>
         </div>
-
-
 
         {/* SCROLLABLE CONTENT */}
         <div className="flex flex-col">
@@ -91,11 +84,12 @@ export default function MobileProductPageLayout({
             {/* FILTER PANEL */}
             {open && (
               <motion.div
-                initial={{ opacity: 0,  }}
-                animate={{ opacity: 1,  }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                exit={{ opacity: 0,  }}
-                className="flex flex-col gap-4 mt-2 bg-secondary p-4 rounded-md border border-gray-200">
+                exit={{ opacity: 0 }}
+                className="flex flex-col gap-4 mt-2 bg-secondary p-4 rounded-md border border-gray-200"
+              >
                 <div className="flex items-center gap-4">
                   <Checkbox
                     id="inStock"
@@ -113,7 +107,59 @@ export default function MobileProductPageLayout({
 
           {/* PRODUCT LIST */}
           <div className=" mt-4 mb-8 w-full">
-            <ProductGrid filteredProducts={filteredProducts} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="grid grid-cols-2 lg:grid-cols-3 gap-[1rem] w-full"
+            >
+              {filteredProducts.length === 0 ? (
+                <div className="opacity-60 text-center col-span-full">
+                  No products found
+                </div>
+              ) : (
+                filteredProducts.map((p, i) => (
+                  <motion.div
+                    key={p.id}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: i * 0.05,
+                      ease: "easeInOut",
+                      duration: 0.6,
+                    }}
+                    className="w-full"
+                  >
+                    <Card className="rounded-none border-none">
+                      {p.media?.[0] && (
+                        <Link href={`/products/${p.slug}`}>
+                          <Image
+                            src={p.media[0]}
+                            alt={p.title}
+                            width={265}
+                            height={314}
+                            className="w-full object-cover border"
+                          />
+                        </Link>
+                      )}
+                      <CardContent className="p-4 flex flex-col gap-2">
+                        <p className="text-sm text-gray-500">{p.category}</p>
+                        <div className="flex justify-between items-center">
+                          <Link href={`/products/${p.slug}`}>
+                            <CardTitle className="text-base font-medium hover:underline">
+                              {p.title}
+                            </CardTitle>
+                          </Link>
+                          <span className="text-base font-semibold">
+                            ${p.price}
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))
+              )}
+            </motion.div>
           </div>
         </div>
       </div>

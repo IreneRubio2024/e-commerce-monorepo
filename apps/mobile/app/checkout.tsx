@@ -6,14 +6,13 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  ActivityIndicator,
   Alert,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import { useCart } from "./context/cart-Context-mobile";
 import { createOrder, OrderItem } from "@repo/shared/orders";
-
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
 interface ShippingInfo {
   name: string;
   email: string;
@@ -22,11 +21,9 @@ interface ShippingInfo {
   postalCode: string;
   country: string;
 }
-
-export default function CartScreen({ navigation, route }: any) {
+export default function Checkout({ route }: any) {
   const { items, clearCart } = useCart();
   const orderIdParam = route?.params?.orderId;
-
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     name: "",
     email: "",
@@ -35,19 +32,16 @@ export default function CartScreen({ navigation, route }: any) {
     postalCode: "",
     country: "",
   });
-
   const [order, setOrder] = useState<{ id: number; total: number } | null>(
     null
   );
   const [loading, setLoading] = useState(false);
   const [paid, setPaid] = useState(false);
-
   const subtotal = items.reduce(
     (sum: number, it: { product: { price: number }; quantity: number }) =>
       sum + it.product.price * it.quantity,
     0
   );
-
   useEffect(() => {
     if (orderIdParam && items.length) {
       const total = items.reduce(
@@ -58,14 +52,12 @@ export default function CartScreen({ navigation, route }: any) {
       setOrder({ id: parseInt(orderIdParam), total });
     }
   }, [orderIdParam, items]);
-
   const handleInputChange = (field: keyof ShippingInfo, value: string) => {
     setShippingInfo({ ...shippingInfo, [field]: value });
   };
   const handleCreateOrder = async () => {
     if (!items.length) return;
     setLoading(true);
-
     try {
       const orderItems: OrderItem[] = items.map(
         (it: { product: { id: number; price: number }; quantity: number }) => ({
@@ -74,19 +66,16 @@ export default function CartScreen({ navigation, route }: any) {
           price: it.product.price,
         })
       );
-
       const total = items.reduce(
         (sum: number, it: { product: { price: number }; quantity: number }) =>
           sum + it.product.price * it.quantity,
         0
       );
-
       const newOrder = await createOrder({
         items: orderItems,
         total,
         orderStatus: "pending",
       });
-
       setOrder({ id: newOrder.data.id, total });
       Alert.alert("Order Created", `Order #${newOrder.data.id} created!`);
     } catch (err) {
@@ -96,95 +85,93 @@ export default function CartScreen({ navigation, route }: any) {
       setLoading(false);
     }
   };
-
   const handleApprove = async () => {
     if (!order) return;
     Alert.alert("Payment Successful", "Your order has been paid.");
-
     try {
       await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/orders/${order.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data: { orderStatus: "paid" } }),
       });
-
       setPaid(true);
       clearCart();
     } catch (err) {
       console.error(err);
     }
   };
-
-  if (!order) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Checkout</Text>
-        <TouchableOpacity
-          onPress={handleCreateOrder}
-          style={styles.checkoutButton}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.checkoutText}>Start Checkout</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Checkout</Text>
-
-      {/* Shipping info */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Information</Text>
-        {["name", "email", "address", "city", "postalCode", "country"].map(
-          (field) => (
-            <TextInput
-              key={field}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              value={shippingInfo[field as keyof ShippingInfo]}
-              onChangeText={(value) =>
-                handleInputChange(field as keyof ShippingInfo, value)
-              }
-              style={styles.input}
-            />
-          )
-        )}
-      </View>
-
-      {/* Shipping details */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Shipping</Text>
-        <Text>Standard shipping: 5–7 business days</Text>
-      </View>
-
-      {/* Payment */}
-      {!paid ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment</Text>
-          <TouchableOpacity onPress={handleApprove} style={styles.payButton}>
-            <Text style={styles.payText}>Pay with PayPal</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <Text style={styles.successText}>
-          Payment Successful! Thank you for your order.
-        </Text>
-      )}
-
-      {/* Cart summary */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your Cart</Text>
-        {items.length === 0 ? (
-          <Text style={styles.emptyText}>Your cart is empty</Text>
-        ) : (
+    <SafeAreaProvider style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={items}
             keyExtractor={(it) => it.product.id.toString()}
+            style={{ flex: 1 }}
+            contentContainerStyle={{
+              padding: 20,
+              paddingBottom: 60, // space for bottom content
+            }}
+            ListHeaderComponent={
+              <>
+                {/* Header row */}
+                <View style={styles.headerRow}>
+                  <Text style={styles.title}>Checkout</Text>
+                  <Link href="/" style={styles.closeButton}>
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </Link>
+                </View>
+                {/* Information section */}
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Information</Text>
+                  {[
+                    "name",
+                    "email",
+                    "address",
+                    "city",
+                    "postalCode",
+                    "country",
+                  ].map((field) => (
+                    <TextInput
+                      key={field}
+                      placeholder={
+                        field.charAt(0).toUpperCase() + field.slice(1)
+                      }
+                      value={shippingInfo[field as keyof ShippingInfo]}
+                      onChangeText={(value) =>
+                        handleInputChange(field as keyof ShippingInfo, value)
+                      }
+                      style={styles.input}
+                    />
+                  ))}
+                </View>
+                {/* Shipping details */}
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Shipping</Text>
+                  <Text>Standard shipping: 5–7 business days</Text>
+                </View>
+                {/* Payment */}
+                {!paid ? (
+                  <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Payment</Text>
+                    <TouchableOpacity
+                      onPress={handleApprove}
+                      style={styles.payButton}
+                    >
+                      <Text style={styles.payText}>Pay with PayPal</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <Text style={styles.successText}>
+                    Payment Successful! Thank you for your order.
+                  </Text>
+                )}
+                {/* Cart summary header */}
+                <View style={styles.section}>
+                  <Text style={styles.sectionTitle}>Your Cart</Text>
+                </View>
+              </>
+            }
             renderItem={({ item }) => (
               <View style={styles.cartItem}>
                 {item.product.media?.[0] ? (
@@ -204,20 +191,26 @@ export default function CartScreen({ navigation, route }: any) {
                 </View>
               </View>
             )}
+            ListFooterComponent={
+              <View style={styles.subtotal}>
+                <Text style={styles.subtotalText}>Subtotal</Text>
+                <Text style={styles.subtotalText}>${subtotal.toFixed(2)}</Text>
+              </View>
+            }
           />
-        )}
-        <View style={styles.subtotal}>
-          <Text style={styles.subtotalText}>Subtotal</Text>
-          <Text style={styles.subtotalText}>${subtotal.toFixed(2)}</Text>
         </View>
-      </View>
-    </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
-
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
+  container: {
+    flexGrow: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+    paddingTop: 20,
+  },
+  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, marginTop: 40 },
   section: { marginBottom: 24 },
   sectionTitle: { fontWeight: "600", fontSize: 18, marginBottom: 10 },
   input: {
@@ -226,8 +219,30 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#F5F5F5",
   },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  closeButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 21,
+    backgroundColor: "#000000",
+    color: "#FFFFFF",
+    fontWeight: 600,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  // title: {
+  //   fontSize: 24,
+  //   fontWeight: "bold",
+  // },
   checkoutButton: {
     backgroundColor: "black",
     padding: 14,

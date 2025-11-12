@@ -9,6 +9,7 @@ import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface ShippingInfo {
   name: string;
@@ -102,17 +103,27 @@ export default function CheckoutPage() {
 
   if (!order) {
     return (
-      <div className="p-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+        className="p-8"
+      >
         <h1 className="text-2xl font-bold">Checkout</h1>
         <Button className="" onClick={handleCreateOrder}>
           {loading ? "Creating Order..." : "Start Checkout"}
         </Button>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="flex flex-col items-start justify-start w-full">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+      className="flex flex-col items-start justify-start w-full"
+    >
       <span className=" flex flex-col customGap px-8 mt-8 pb-8 lg:px-16 lg:pb-0  w-full">
         <Link href="/">
           <svg
@@ -265,6 +276,6 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
