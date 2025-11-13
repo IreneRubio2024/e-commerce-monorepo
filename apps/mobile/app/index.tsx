@@ -32,17 +32,7 @@ const { width: screenWidth } = Dimensions.get("window");
 
 export default function HomeScreen() {
   const [openFilter, setOpenFilter] = useState(false);
-  const [categories] = useState([
-    "All",
-    "Tops",
-    "Dresses",
-    "Jeans",
-    "Bags",
-    "Tops",
-    "Jeans",
-    "Sneakers",
-    "Bags",
-  ]);
+  const [categories, setCategory] = useState<string[]>([]);
   const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -81,6 +71,7 @@ export default function HomeScreen() {
         const fetched = await fetchProducts();
         setProducts(fetched);
         setFilteredProducts(fetched);
+        setCategory(fetched.map((item) => item.category));
       } catch (err) {
         console.error("Error fetching products:", err);
       } finally {
@@ -89,7 +80,6 @@ export default function HomeScreen() {
     };
     loadProducts();
   }, []);
-  console.log(Navbar);
 
   function applyCategory(category: string) {
     if (category == "All") {
@@ -142,6 +132,12 @@ export default function HomeScreen() {
             {/* Category Scroll */}
             <ScrollView horizontal style={styles.categoryScroll}>
               <View style={styles.categoryScrollBox}>
+                <TouchableOpacity
+                  onPress={() => applyCategory("All")}
+                  style={styles.categoryBox}
+                >
+                  <Text>All</Text>
+                </TouchableOpacity>
                 {categories.map((cat, i) => (
                   <TouchableOpacity
                     onPress={() => applyCategory(cat)}
@@ -192,7 +188,7 @@ export default function HomeScreen() {
                       />
                     </View>
                     <Text style={{ fontSize: 16, opacity: 0.66 }}>
-                      {item.slug || "product"}
+                      {item.category}
                     </Text>
                     <View style={styles.productTitleandPrice}>
                       <Text style={{ fontSize: 18 }}>{item.title}</Text>

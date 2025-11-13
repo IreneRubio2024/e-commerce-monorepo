@@ -14,8 +14,6 @@ import { useCart } from "./context/cart-Context-mobile";
 export default function Cart() {
   const { items, updateQty, removeItem, subtotal } = useCart();
 
-  console.log("in Cart", items);
-
   return (
     <SafeAreaProvider>
       <SafeAreaView>
