@@ -26,18 +26,19 @@ import { useRouter } from "expo-router";
 
 import { fetchProducts, type Product } from "@repo/shared/products";
 import { Navbar } from "@/components/navbar";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: screenWidth } = Dimensions.get("window");
 
 export default function HomeScreen() {
   const [openFilter, setOpenFilter] = useState(false);
   const [categories] = useState([
-    "New",
-    "Shirts",
-    "Polo Shirts",
-    "Shorts",
-    "Best Selling",
-    "T-Shirts",
+    "All",
+    "Tops",
+    "Dresses",
+    "Jeans",
+    "Bags",
+    "Tops",
     "Jeans",
     "Sneakers",
     "Bags",
@@ -46,6 +47,7 @@ export default function HomeScreen() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   // --- Animation setup ---
   const slideAnim = useRef(new Animated.Value(0)).current;
@@ -78,6 +80,7 @@ export default function HomeScreen() {
       try {
         const fetched = await fetchProducts();
         setProducts(fetched);
+        setFilteredProducts(fetched);
       } catch (err) {
         console.error("Error fetching products:", err);
       } finally {
@@ -87,6 +90,16 @@ export default function HomeScreen() {
     loadProducts();
   }, []);
   console.log(Navbar);
+
+  function applyCategory(category: string) {
+    if (category == "All") {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter((item) => item.category == category);
+      setFilteredProducts(filtered);
+    }
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -104,11 +117,11 @@ export default function HomeScreen() {
           <TextInput style={styles.searchInput} placeholder="search" />
         </View>
 
-        <Pressable onPress={() => setOpenFilter(!openFilter)}>
+        {/* <Pressable onPress={() => setOpenFilter(!openFilter)}>
           <Text style={styles.filterToggle}>
             Filter {openFilter ? "<" : ">"}
           </Text>
-        </Pressable>
+        </Pressable> */}
 
         {/* Main wrapper */}
         <View style={styles.mainWrapper}>
@@ -130,9 +143,13 @@ export default function HomeScreen() {
             <ScrollView horizontal style={styles.categoryScroll}>
               <View style={styles.categoryScrollBox}>
                 {categories.map((cat, i) => (
-                  <View style={styles.categoryBox} key={i}>
+                  <TouchableOpacity
+                    onPress={() => applyCategory(cat)}
+                    style={styles.categoryBox}
+                    key={i}
+                  >
                     <Text>{cat}</Text>
-                  </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             </ScrollView>
@@ -148,7 +165,7 @@ export default function HomeScreen() {
               </Text>
             ) : (
               <FlatList
-                data={products}
+                data={filteredProducts}
                 numColumns={openFilter ? 1 : 2}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
@@ -276,6 +293,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     columnGap: 14,
+    marginTop: 12,
   },
   categoryBox: {
     justifyContent: "center",
