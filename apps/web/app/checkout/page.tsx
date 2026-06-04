@@ -212,22 +212,23 @@ export default function CheckoutPage() {
               <h2 className=" font-semibold mb-[1rem]">Payment</h2>
               <PayPalScriptProvider
                 options={{
-                  "client-id":
+                  clientId:
                     "AUa_2VKidyFS717-wJIqOs1gL9qhFS8KzM0oTGzSVZIp5cHzyC_tC8_Z1VOzPTBqZ8G9fw1Atq5CDetu",
                   currency: "USD",
                   intent: "capture",
                 }}
               >
                 <PayPalButtons
-                  createOrder={(data, actions) => {
+                  createOrder={(_data, actions) => {
                     return actions.order.create({
+                      intent: "CAPTURE",
                       purchase_units: [
-                        { amount: { value: order.total.toFixed(2) } },
+                        { amount: { currency_code: "USD", value: order.total.toFixed(2) } },
                       ],
                     });
                   }}
-                  onApprove={(data, actions) => {
-                    return actions.order.capture().then(handleApprove);
+                  onApprove={(_data, actions) => {
+                    return actions.order!.capture().then(handleApprove);
                   }}
                 />
               </PayPalScriptProvider>

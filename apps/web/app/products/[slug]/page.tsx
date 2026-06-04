@@ -48,7 +48,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   useEffect(() => {
     if (product) {
       trackProductView(
-        product.id || slug, // Use product.id if available, otherwise slug
+        String(product.id ?? slug),
         product.title,
         product.price
       );
@@ -60,7 +60,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
     // Track the add to cart event
     trackAddToCart(
-      product.id || slug, // Use product.id if available, otherwise slug
+      String(product.id ?? slug),
       product.title,
       product.price,
       1
