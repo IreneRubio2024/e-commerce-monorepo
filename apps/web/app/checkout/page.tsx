@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import React, { useState, useEffect } from "react";
 import { useCart } from "app/components/cart/CartProvider";
 import { createOrder, OrderItem } from "@repo/shared/orders";
