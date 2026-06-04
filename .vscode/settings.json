@@ -1,0 +1,10 @@
+{
+  "workbench.portAttributes": {
+    "3000": {
+      "onAutoForward": "openBrowser"
+    },
+    "1337": {
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
