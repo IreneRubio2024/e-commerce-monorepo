@@ -8,6 +8,11 @@ const nextConfig = {
         port: "1337",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "e-commerce-monorepo-production-bb89.up.railway.app",
+        pathname: "/uploads/**",
+      },
     ],
   },
 };
