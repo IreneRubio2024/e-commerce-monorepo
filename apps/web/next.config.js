@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "e-commerce-monorepo-production-bb89.up.railway.app",
+        hostname: "e-commerce-monorepo-yqdg.onrender.com",
         pathname: "/uploads/**",
       },
     ],
