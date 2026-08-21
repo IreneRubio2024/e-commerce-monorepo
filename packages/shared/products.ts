@@ -17,13 +17,38 @@ const STRAPI_URL =
 
 const API_URL = `${STRAPI_URL}/api/products?populate=*`;
 
+// Free-tier hosts (e.g. Render) spin down after inactivity and can take
+// 20-50s to wake back up, so retry a few times instead of giving up on the
+// first slow/failed request.
+async function fetchWithRetry(
+  url: string,
+  { retries = 4, timeoutMs = 15000, delayMs = 4000 } = {}
+): Promise<Response> {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      if (res.ok) return res;
+      lastError = new Error(`Request failed with status ${res.status}`);
+    } catch (err) {
+      lastError = err;
+    } finally {
+      clearTimeout(timer);
+    }
+    if (attempt < retries) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+
+  throw lastError;
+}
+
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const res = await fetch(API_URL);
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch products. Status: ${res.status}`);
-    }
+    const res = await fetchWithRetry(API_URL);
 
     const json = await res.json();
 
@@ -71,12 +96,9 @@ export async function fetchProducts(): Promise<Product[]> {
 }
 
 export async function fetchProduct(slug: string): Promise<Product | null> {
-  const res = await fetch(
-    `${STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate=*`,
-   
+  const res = await fetchWithRetry(
+    `${STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate=*`
   );
-
-  if (!res.ok) throw new Error("Failed to fetch product");
 
   const json = await res.json();
   const item = json.data?.[0];

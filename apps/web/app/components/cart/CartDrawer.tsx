@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useCart } from "./CartProvider";
 import { createOrder, OrderItem } from "@repo/shared/orders";
-import Image from "next/image";
+import RetryImage from "../RetryImage";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -89,7 +89,7 @@ export default function CartDrawer({
                     {/* Image */}
                     <div className="relative w-full h-40 col-span-1">
                       {it.product.media?.[0] ? (
-                        <Image
+                        <RetryImage
                           src={it.product.media[0]}
                           alt={it.product.title}
                           fill

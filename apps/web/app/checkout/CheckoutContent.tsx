@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "app/components/cart/CartProvider";
 import { createOrder, OrderItem } from "@repo/shared/orders";
-import Image from "next/image";
+import RetryImage from "app/components/RetryImage";
 import { useRouter, useSearchParams } from "next/navigation";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { Input } from "@/components/ui/input";
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
             items.map((it) => (
               <div key={it.product.id} className="flex gap-3 items-center">
                 {it.product.media?.[0] ? (
-                  <Image
+                  <RetryImage
                     src={it.product.media[0]}
                     alt={it.product.title}
                     width={80}

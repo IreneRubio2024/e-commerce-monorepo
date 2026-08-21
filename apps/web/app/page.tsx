@@ -12,7 +12,7 @@ import MainWrapper from "./components/MainWrapper";
 import MobileProductPageLayout from "./components/MobileProductPageLayout";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import Image from "next/image";
+import RetryImage from "./components/RetryImage";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -47,11 +47,13 @@ export default function Home() {
       const fetched = await fetchProducts();
       setProducts(fetched);
       setLoading(false);
-
-      // Delay showing page content so Navbar appears first
-      setTimeout(() => setShowContent(true), 600); // 0.3s delay
     };
     loadProducts();
+
+    // Delay showing page content so Navbar appears first, independent of
+    // how long the product fetch takes (e.g. a cold-started backend).
+    const timer = setTimeout(() => setShowContent(true), 600);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -91,6 +93,7 @@ export default function Home() {
               setOnlyInStock={setOnlyInStock}
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
+              loading={loading}
             />
           ) : (
             <MainWrapper>
@@ -168,7 +171,14 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-[1rem] w-full">
-                  {filteredProducts.length === 0 ? (
+                  {loading ? (
+                    Array.from({ length: 6 }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-full aspect-[265/314] bg-gray-200 animate-pulse"
+                      />
+                    ))
+                  ) : filteredProducts.length === 0 ? (
                     <div className="opacity-60 text-center col-span-full">
                       No products found
                     </div>
@@ -178,7 +188,7 @@ export default function Home() {
                         <Card className="rounded-none border-none">
                           {p.media?.[0] && (
                             <Link href={`/products/${p.slug}`}>
-                              <Image
+                              <RetryImage
                                 src={p.media[0]}
                                 alt={p.title}
                                 width={265}

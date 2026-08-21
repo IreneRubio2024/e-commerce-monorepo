@@ -4,7 +4,7 @@ import { use, useEffect, useState } from "react";
 import { fetchProduct, type Product } from "@repo/shared/products";
 import Navbar from "../../components/Navbar";
 import { useCart } from "../../components/cart/CartProvider";
-import Image from "next/image";
+import RetryImage from "../../components/RetryImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trackProductView, trackAddToCart } from "../../lib/analytics";
@@ -87,7 +87,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     min-h-[60vh] `}
           >
             {selectedImage && (
-              <Image
+              <RetryImage
                 src={
                   selectedImage.includes("http")
                     ? selectedImage
@@ -109,7 +109,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   } hover:border-black`}
                 onClick={() => setSelectedImage(img)}
               >
-                <Image
+                <RetryImage
                   src={img}
                   alt={`${product.title} detail ${i + 1}`}
                   fill

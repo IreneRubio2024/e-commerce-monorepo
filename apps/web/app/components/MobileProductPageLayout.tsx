@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+import RetryImage from "./RetryImage";
 import Link from "next/link";
 
 type MobileProps = {
@@ -19,6 +19,7 @@ type MobileProps = {
   setOnlyInStock: (value: boolean) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  loading: boolean;
 };
 
 export default function MobileProductPageLayout({
@@ -32,6 +33,7 @@ export default function MobileProductPageLayout({
   setOnlyInStock,
   searchQuery,
   setSearchQuery,
+  loading,
 }: MobileProps) {
   return (
     <div className="flex flex-col col-span-12  min-h-screen">
@@ -113,7 +115,14 @@ export default function MobileProductPageLayout({
               transition={{ duration: 0.4, ease: "easeOut" }}
               className="grid grid-cols-2 lg:grid-cols-3 gap-[1rem] w-full"
             >
-              {filteredProducts.length === 0 ? (
+              {loading ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-full aspect-[265/314] bg-gray-200 animate-pulse"
+                  />
+                ))
+              ) : filteredProducts.length === 0 ? (
                 <div className="opacity-60 text-center col-span-full">
                   No products found
                 </div>
@@ -133,7 +142,7 @@ export default function MobileProductPageLayout({
                     <Card className="rounded-none border-none">
                       {p.media?.[0] && (
                         <Link href={`/products/${p.slug}`}>
-                          <Image
+                          <RetryImage
                             src={p.media[0]}
                             alt={p.title}
                             width={265}
