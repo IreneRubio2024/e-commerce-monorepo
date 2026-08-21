@@ -10,7 +10,9 @@ export default function RetryImage({
   src,
   alt,
   className,
-  style,
+  fill,
+  width,
+  height,
   ...props
 }: ImageProps) {
   const [attempt, setAttempt] = useState(0);
@@ -36,33 +38,50 @@ export default function RetryImage({
       ? src
       : `${src}${String(src).includes("?") ? "&" : "?"}retry=${attempt}`;
 
-  const wrapperStyle = props.fill
-    ? undefined
-    : { width: props.width, height: props.height, ...style };
+  const skeleton = !loaded && !failed && (
+    <span className="absolute inset-0 animate-pulse bg-gray-200" />
+  );
 
+  const image = failed ? (
+    <span className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 text-xs">
+      Image unavailable
+    </span>
+  ) : (
+    <Image
+      key={attempt}
+      src={retriedSrc}
+      alt={alt}
+      fill
+      className={`${className ?? ""} transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
+      onLoad={() => setLoaded(true)}
+      onError={handleError}
+      {...props}
+    />
+  );
+
+  // Callers using `fill` already wrap us in a sized, position:relative
+  // ancestor, so we don't need our own sizing wrapper.
+  if (fill) {
+    return (
+      <>
+        {skeleton}
+        {image}
+      </>
+    );
+  }
+
+  // Callers using explicit width/height (e.g. grid cards) don't provide a
+  // wrapper, so reproduce the same box via aspect-ratio and render the
+  // image with `fill` inside it.
   return (
     <span
-      className={`relative inline-block ${props.fill ? "w-full h-full" : ""} ${className ?? ""}`}
-      style={wrapperStyle}
+      className="relative block w-full"
+      style={{
+        aspectRatio: width && height ? `${width} / ${height}` : undefined,
+      }}
     >
-      {!loaded && !failed && (
-        <span className="absolute inset-0 animate-pulse bg-gray-200" />
-      )}
-      {failed ? (
-        <span className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400 text-xs">
-          Image unavailable
-        </span>
-      ) : (
-        <Image
-          key={attempt}
-          src={retriedSrc}
-          alt={alt}
-          className={`${props.fill ? "" : "w-full h-full"} transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
-          onLoad={() => setLoaded(true)}
-          onError={handleError}
-          {...props}
-        />
-      )}
+      {skeleton}
+      {image}
     </span>
   );
 }
