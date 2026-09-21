@@ -6,7 +6,6 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
@@ -15,7 +14,6 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { fetchProduct, type Product } from "@repo/shared/products";
 import { useCart } from "../context/cart-Context-mobile";
 
-import { logo, filterBar, profile, cart } from "@/assets/images";
 import { Navbar } from "@/components/navbar";
 
 export default function ProductDetailPage() {
